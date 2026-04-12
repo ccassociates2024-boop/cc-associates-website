@@ -1,0 +1,99 @@
+==========================================
+ASSOCIATE PIYUSH — INSTALLATION GUIDE
+==========================================
+
+PREREQUISITES:
+- Node.js 18+ installed (Download from: https://nodejs.org)
+- npm 9+ (comes with Node.js)
+
+SETUP STEPS:
+============
+
+1. Open Command Prompt or PowerShell as Administrator
+
+2. Navigate to the project directory:
+   cd "C:\Users\Piyush\OneDrive\Desktop\office work\LECTURE TIME\associate-piyush"
+
+3. Install all dependencies:
+   npm install
+
+4. Start the development server:
+   npm run dev
+
+5. Open your browser and go to:
+   http://localhost:3000
+
+FOR PRODUCTION BUILD:
+=====================
+   npm run build
+   npm start
+
+EMAILJS SETUP (Contact Form):
+================================
+1. Sign up at https://www.emailjs.com (free tier: 200 emails/month)
+2. Create a new Email Service (Gmail, Outlook, etc.)
+3. Create an Email Template with variables:
+   - {{from_name}}, {{from_email}}, {{phone}}, {{service}}, {{message}}
+4. Get your Service ID, Template ID, and Public Key
+5. Update app/contact/page.tsx:
+   Replace "YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", "YOUR_PUBLIC_KEY"
+
+WHATSAPP LINK:
+===============
+Update the WhatsApp links in:
+- app/contact/page.tsx (line with wa.me/919XXXXXXXXX)
+- components/Footer.tsx (if added)
+Replace 9XXXXXXXXX with your actual 10-digit mobile number.
+
+PROJECT STRUCTURE:
+==================
+associate-piyush/
+├── app/
+│   ├── layout.tsx          (Root layout, metadata, JSON-LD)
+│   ├── globals.css         (Global styles, CSS variables)
+│   ├── page.tsx            (Home page)
+│   ├── services/page.tsx   (Services page)
+│   ├── tools/
+│   │   ├── page.tsx               (Tools listing)
+│   │   ├── gst-invoice/page.tsx   (Tool 1)
+│   │   ├── tds-calculator/page.tsx (Tool 2)
+│   │   ├── itr-estimator/page.tsx  (Tool 3)
+│   │   ├── gstr2a-recon/page.tsx   (Tool 4)
+│   │   ├── gst-late-fee/page.tsx   (Tool 5)
+│   │   ├── 26as-recon/page.tsx     (Tool 6)
+│   │   ├── advance-tax/page.tsx    (Tool 7)
+│   │   ├── pdf-merge/page.tsx      (Tool 8)
+│   │   ├── pdf-compress/page.tsx   (Tool 9)
+│   │   ├── word-to-pdf/page.tsx    (Tool 10)
+│   │   ├── bank-statement/page.tsx (Tool 11)
+│   │   └── tally-ledger/page.tsx   (Tool 12)
+│   ├── resources/
+│   │   ├── page.tsx               (Articles listing)
+│   │   └── [slug]/page.tsx        (Article detail)
+│   ├── about/page.tsx      (About page)
+│   └── contact/page.tsx    (Contact page)
+├── components/
+│   ├── Navbar.tsx
+│   └── Footer.tsx
+├── public/
+│   ├── sitemap.xml
+│   └── robots.txt
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+└── next.config.js
+
+DEPLOYMENT (Vercel - Recommended):
+=====================================
+1. Push to GitHub: git init && git add . && git commit -m "Initial commit"
+2. Go to https://vercel.com and import the GitHub repo
+3. Vercel auto-detects Next.js — click Deploy
+4. Add custom domain: associatepiyush.in (update DNS CNAME records)
+
+CUSTOM DOMAIN DNS:
+==================
+Add these DNS records at your domain registrar:
+- Type: CNAME, Name: www, Value: cname.vercel-dns.com
+- Type: A, Name: @, Value: 76.76.21.21
+
+© 2026 Associate Piyush, Pune, Maharashtra
