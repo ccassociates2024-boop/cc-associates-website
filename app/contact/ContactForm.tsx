@@ -163,7 +163,7 @@ export default function ContactForm() {
               {/* Message Preview */}
               <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-xs text-green-900 font-mono leading-relaxed">
                 <div className="text-[10px] text-green-600 font-semibold uppercase tracking-wide mb-1.5">Message Preview (example)</div>
-                <div className="whitespace-pre-line">{`*Inquiry — CC Associates*\n\nHi CC Associates,\n\nI'm *Rahul Sharma* and I need assistance with *Income Tax Filing*.\n\n📱 My Phone: +91 98765 43210\n📝 Details: I need to file ITR for FY 2025-26.\n\n— via CCAssociates.in`}</div>
+                <div className="whitespace-pre-line">{`*Inquiry — CC Associates*\n\nHi CC Associates,\n\nI'm *Piyush Nimse* and I need assistance with *Income Tax Filing*.\n\n📱 My Phone: +91 98765 43210\n📝 Details: I need to file ITR for FY 2025-26.\n\n— via CCAssociates.in`}</div>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -174,7 +174,7 @@ export default function ContactForm() {
                       type="text"
                       required
                       className={inputCls}
-                      placeholder="e.g. Rahul Sharma"
+                      placeholder="e.g. Piyush Nimse"
                       value={form.name}
                       onChange={(e) => set("name", e.target.value)}
                     />

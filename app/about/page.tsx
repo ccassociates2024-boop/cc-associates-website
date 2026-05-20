@@ -9,7 +9,7 @@ import Team from "@/components/Team";
 export const metadata: Metadata = {
   title: "About CC Associates",
   description:
-    "Meet the team at CC Associates — C.A. Sourabh Bhimrao Chavan and C.A. Shruti Sourabh Chavan. Expert Chartered Accountants in Pune serving clients across India since 2025.",
+    "Meet the team at CC Associates — C.A. Sourabh Bhimrao Chavan and C.A. Shruti Sourabh Chavan. Expert Chartered Accountants in Pune serving clients across India since 2022.",
   keywords: [
     "CC Associates team",
     "CC Associates tax consultant pune",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About CC Associates | Tax & Advisory Firm Pune",
     description:
-      "C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan — CC Associates, Pune. GST, Income Tax, TDS, Forensic Accounting, Audit & Business Advisory. Pan India service since 2025.",
+      "C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan — CC Associates, Pune. GST, Income Tax, TDS, Forensic Accounting, Audit & Business Advisory. Pan India service since 2022.",
     url: "https://cc-associates-website.vercel.app/about",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax Consultants Pune" }],
   },
@@ -61,12 +61,12 @@ const tools = [
 ];
 
 const stats = [
-  { label: "Tax Cases Handled", value: "950+" },
-  { label: "Audit Clients", value: "28+" },
-  { label: "GST Clients", value: "150+" },
+  { label: "ITR Filed", value: "3000+" },
+  { label: "Audit Clients", value: "100+" },
+  { label: "GST Clients", value: "250+" },
   { label: "States Covered", value: "15+" },
   { label: "Free Tools Built", value: "15" },
-  { label: "Active Since", value: "2025" },
+  { label: "Active Since", value: "2022" },
 ];
 
 export default function AboutPage() {
@@ -92,7 +92,7 @@ export default function AboutPage() {
             </div>
             <div className="flex items-center gap-1.5">
               <Award size={14} className="text-purple-600" />
-              Active Since 2025
+              Active Since 2022
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function AboutPage() {
                     The firm combines the tax and forensic expertise of C.A. Shruti Sourabh Chavan with the audit and advisory experience of C.A. Sourabh Bhimrao Chavan. This dual-specialization allows us to offer end-to-end financial services from GST reconciliation and ITR filing to statutory audits and business advisory under one roof.
                   </p>
                   <p>
-                    We have handled 950+ tax cases, 28+ audit engagements, and 150+ GST clients across manufacturing, trading, services, real estate, and e-commerce sectors. Our clients range from individual proprietors to multi-crore private limited companies.
+                    We have handled 3000+ ITR filed, 100+ audit engagements, and 250+ GST clients across manufacturing, trading, services, real estate, and e-commerce sectors. Our clients range from individual proprietors to multi-crore private limited companies.
                   </p>
                   <p>
                     Beyond client work, we build free financial tools (this website!) to democratize access to professional-grade tax calculators and reconciliation tools for small businesses and professionals across India.

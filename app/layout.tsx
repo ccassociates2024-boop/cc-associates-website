@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | CC Associates",
   },
   description:
-    "Professional tax and advisory by CC Associates — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
+    "Professional tax and advisory by CC Associates — 3000+ income tax returns, GST compliance, TDS, statutory audit, litigation & business advisory. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
   keywords: [
     "CC Associates pune",
     "tax consultant pune",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: "CC Associates",
     title: "CC Associates — Tax & Advisory Practice | Pune",
     description:
-      "950+ income tax cases. GST, TDS, Audit, Litigation. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Since 2025. ccassociates2024@gmail.com",
+      "3000+ income tax returns. GST, TDS, Audit, Litigation. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Since 2022. ccassociates2024@gmail.com",
     images: [
       {
         url: "/og-image.png",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CC Associates | Tax Advisory, GST, Audit | Pune",
     description:
-      "950+ income tax cases. GST, TDS, Audit & Litigation by CC Associates — Pune. Pan India service.",
+      "3000+ income tax returns. GST, TDS, Audit & Litigation by CC Associates — Pune. Pan India service.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -79,11 +79,11 @@ const jsonLd = {
   name: "CC Associates",
   alternateName: "CC Associates",
   description:
-    "Professional tax and advisory practice — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory. Based in Pune, India.",
+    "Professional tax and advisory practice — 3000+ income tax returns, GST compliance, TDS, statutory audit, litigation & business advisory. Based in Pune, India.",
   url: "https://cc-associates-website.vercel.app",
   telephone: "+918421465966",
   email: "ccassociates2024@gmail.com",
-  foundingDate: "2025",
+  foundingDate: "2022",
   areaServed: "India",
   address: {
     "@type": "PostalAddress",

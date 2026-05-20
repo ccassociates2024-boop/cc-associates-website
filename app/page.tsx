@@ -5,14 +5,13 @@ import {
   BarChart3, Briefcase, Shield, FileText, CheckCircle,
 } from "lucide-react";
 import Team from "@/components/Team";
-import Testimonials from "@/components/Testimonials";
 
 export const metadata: Metadata = {
   title: {
     absolute: "CC Associates | Tax Advisory, GST, Audit & Litigation | Pune, India",
   },
   description:
-    "CC Associates — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory in Pune. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pan India.",
+    "CC Associates — 3000+ income tax returns, GST compliance, TDS, statutory audit, litigation & business advisory in Pune. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pan India.",
   keywords: [
     "CC Associates pune",
     "tax consultant pune",
@@ -28,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "CC Associates | Tax Advisory, GST, Audit & Litigation | Pune",
     description:
-      "950+ income tax cases. Expert GST, TDS, Audit & Litigation services. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
+      "3000+ income tax returns. Expert GST, TDS, Audit & Litigation services. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
     url: "https://cc-associates-website.vercel.app",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax & Advisory Practice Pune" }],
   },
@@ -80,16 +79,16 @@ const services = [
 ];
 
 const stats = [
-  { value: "950+", label: "Income Tax Cases" },
-  { value: "28+", label: "Audit Clients" },
-  { value: "150+", label: "GST Clients" },
-  { value: "Since 2025", label: "In Practice" },
+  { value: "3000+", label: "ITR Filed" },
+  { value: "100+", label: "Audit Clients" },
+  { value: "250+", label: "GST Clients" },
+  { value: "Since 2022", label: "In Practice" },
 ];
 
 const trustBadges = [
-  "950+ Tax cases",
-  "28+ Audit clients",
-  "150+ GST clients",
+  "3000+ ITR Filed",
+  "100+ Audit clients",
+  "250+ GST clients",
   "Confidential",
 ];
 
@@ -254,22 +253,6 @@ export default function HomePage() {
               View All Services <ArrowRight size={14} />
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ─────────────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="mb-12">
-            <p className="text-purple-600 text-xs font-semibold uppercase tracking-widest mb-2">
-              Client Testimonials
-            </p>
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-[#26215C]">
-              What Our Clients Say
-            </h2>
-            <div className="w-12 h-0.5 bg-gold-500 mt-3" />
-          </div>
-          <Testimonials />
         </div>
       </section>
 
@@ -466,7 +449,7 @@ export default function HomePage() {
             </a>
           </div>
           <p className="text-purple-400 text-xs mt-5">
-            ccassociates2024@gmail.com · Pune, Maharashtra · Since 2025
+            ccassociates2024@gmail.com · Pune, Maharashtra · Since 2022
           </p>
         </div>
       </section>

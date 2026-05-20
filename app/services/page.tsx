@@ -255,7 +255,7 @@ export default function ServicesPage() {
               </div>
               <div className="font-semibold text-[#26215C] mb-0.5">CC Associates</div>
               <div className="text-xs text-purple-600 font-medium mb-2">Founding Partner — Tax & Finance</div>
-              <div className="text-xs text-[#7F77DD] leading-relaxed">GST, Income Tax, TDS, Forensic Accounting. 950+ cases handled across India.</div>
+              <div className="text-xs text-[#7F77DD] leading-relaxed">GST, Income Tax, TDS, Forensic Accounting. 3000+ ITR filed across India.</div>
             </div>
             <div className="flex-1 bg-surface rounded-2xl border border-purple-100 p-6 text-left">
               <div className="w-10 h-10 rounded-xl bg-gold-500 flex items-center justify-center mb-3">
@@ -263,7 +263,7 @@ export default function ServicesPage() {
               </div>
               <div className="font-semibold text-[#26215C] mb-0.5">CA Sourabh Chavan</div>
               <div className="text-xs text-purple-600 font-medium mb-2">Audit & Advisory Partner (CA)</div>
-              <div className="text-xs text-[#7F77DD] leading-relaxed">Statutory Audit, Internal Audit, Business Advisory. 7+ years, 28+ audit clients.</div>
+              <div className="text-xs text-[#7F77DD] leading-relaxed">Statutory Audit, Internal Audit, Business Advisory. 7+ years, 100+ audit clients.</div>
             </div>
           </div>
         </div>
