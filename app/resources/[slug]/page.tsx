@@ -292,7 +292,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-white mb-3">{article.title}</h1>
-          <p className="text-blue-300 text-sm">{article.date} · Associate Piyush</p>
+          <p className="text-blue-300 text-sm">{article.date} · CC Associates</p>
         </div>
       </section>
 

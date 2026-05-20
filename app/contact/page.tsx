@@ -4,10 +4,10 @@ import ContactForm from "./ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact CC Associates for GST, Income Tax, TDS, Audit, Litigation & Forensic Accounting consultations. Call or WhatsApp: +91 75073 54141 (Piyush Nimse) | +91 84214 65966 (CA Sourabh Chavan). Pune — Pan India.",
+    "Contact CC Associates for GST, Income Tax, TDS, Audit, Litigation & Forensic Accounting consultations. Call or WhatsApp: +91 84214 65966 (CC Associates) | +91 84214 65966 (CA Sourabh Chavan). Pune — Pan India.",
   keywords: [
     "contact CC Associates pune",
-    "Piyush Nimse contact",
+    "CC Associates contact",
     "CA Sourabh Chavan contact",
     "tax consultation pune",
     "GST consultant contact pune",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Contact CC Associates | Tax & Advisory Pune",
     description:
-      "WhatsApp or call +91 75073 54141. First consultation free. GST, Income Tax, TDS, Audit & Litigation — Pune & Pan India.",
+      "WhatsApp or call +91 84214 65966. First consultation free. GST, Income Tax, TDS, Audit & Litigation — Pune & Pan India.",
     url: "https://associate-piyush-bduu.vercel.app/contact",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },

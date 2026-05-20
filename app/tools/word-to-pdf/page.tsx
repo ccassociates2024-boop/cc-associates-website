@@ -94,7 +94,7 @@ export default function WordToPDFPage() {
         pdf.setFontSize(8);
         pdf.setFont("helvetica", "normal");
         pdf.setTextColor(150, 150, 150);
-        pdf.text(`Converted by Associate Piyush Tools — ${file.name}`, margin, 290);
+        pdf.text(`Converted by CC Associates Tools — ${file.name}`, margin, 290);
         pdf.text(`Page ${i} of ${pagesCount}`, pageWidth - margin, 290, { align: "right" });
         pdf.setTextColor(0, 0, 0);
       }
@@ -195,7 +195,7 @@ export default function WordToPDFPage() {
         </div>
 
         <p className="tool-disclaimer">
-          Results are indicative only. Always consult a qualified tax professional for final decisions. Associate Piyush is not liable for any decisions made based on tool outputs. © 2026 Associate Piyush, Pune.
+          Results are indicative only. Always consult a qualified tax professional for final decisions. CC Associates is not liable for any decisions made based on tool outputs. © 2026 CC Associates, Pune.
         </p>
       </div>
     </div>

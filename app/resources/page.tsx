@@ -6,7 +6,7 @@ import ComplianceCalendar from "./ComplianceCalendar";
 export const metadata: Metadata = {
   title: "Free Tax & Finance Guides",
   description:
-    "Free expert guides on GST ITC eligibility, TDS Rate Chart FY 2026-27, Old vs New Tax Regime comparison, GSTR-9 filing, Forensic Accounting, and Advance Tax — by Associate Piyush, Pune.",
+    "Free expert guides on GST ITC eligibility, TDS Rate Chart FY 2026-27, Old vs New Tax Regime comparison, GSTR-9 filing, Forensic Accounting, and Advance Tax — by CC Associates, Pune.",
   keywords: [
     "GST ITC eligibility guide",
     "TDS rate chart 2026-27",
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     "income tax resources",
   ],
   alternates: {
-    canonical: "https://associatepiyush.in/resources",
+    canonical: "https://ccassociates.in/resources",
   },
   openGraph: {
-    title: "Free Tax & Finance Guides | Associate Piyush",
+    title: "Free Tax & Finance Guides | CC Associates",
     description:
-      "Expert tax guides: GST ITC, TDS, Old vs New Regime, GSTR-9, Forensic Accounting & more — free resources by Piyush Nimse.",
-    url: "https://associatepiyush.in/resources",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Tax Resources - Associate Piyush" }],
+      "Expert tax guides: GST ITC, TDS, Old vs New Regime, GSTR-9, Forensic Accounting & more — free resources by CC Associates.",
+    url: "https://ccassociates.in/resources",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Tax Resources - CC Associates" }],
   },
 };
 
@@ -146,7 +146,7 @@ const categoryColors: Record<string, string> = {
 };
 
 const WA_URL =
-  "https://wa.me/917507354141?text=Hello%2C%20I%20have%20a%20tax%20query";
+  "https://wa.me/918421465966?text=Hello%2C%20I%20have%20a%20tax%20query";
 
 export default function ResourcesPage() {
   return (
@@ -319,7 +319,7 @@ export default function ResourcesPage() {
           <div className="text-center mb-8">
             <p className="text-gold text-sm font-bold uppercase tracking-wider mb-3">Free Consultation</p>
             <h2 className="text-3xl font-bold text-white mb-4">
-              Have a tax question? Get expert guidance from Associate Piyush.
+              Have a tax question? Get expert guidance from CC Associates.
             </h2>
             <p className="text-blue-200 text-base max-w-xl mx-auto">
               First consultation is free. We respond within 2 hours on business days. Serving clients across India from Pune.
@@ -346,21 +346,21 @@ export default function ResourcesPage() {
 
             {/* Phone */}
             <a
-              href="tel:+917507354141"
+              href="tel:+918421465966"
               className="flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-5 transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
                 <Phone size={20} className="text-dark" />
               </div>
               <div className="text-center">
-                <div className="text-white font-semibold text-sm">+91 75073 54141</div>
+                <div className="text-white font-semibold text-sm">+91 84214 65966</div>
                 <div className="text-blue-200 text-xs mt-0.5">Mon–Sat, 10 AM–7 PM</div>
               </div>
             </a>
 
             {/* Email */}
             <a
-              href="mailto:associate.piyush.nimse@gmail.com"
+              href="mailto:ccassociates2024@gmail.com"
               className="flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-5 transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
@@ -386,7 +386,7 @@ export default function ResourcesPage() {
               <ArrowRight size={18} />
             </a>
             <p className="text-blue-300 text-xs mt-3">
-              associate.piyush.nimse@gmail.com · Pune, Maharashtra · Pan India Service
+              ccassociates2024@gmail.com · Pune, Maharashtra · Pan India Service
             </p>
           </div>
         </div>

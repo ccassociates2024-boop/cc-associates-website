@@ -552,8 +552,8 @@ export default function ITREstimatorPage() {
         <p className="tool-disclaimer">
           Results are indicative only. Figures based on Income-tax Act, 2025 effective 1 April 2026.
           Always consult a qualified tax professional for final decisions.
-          Associate Piyush is not liable for any decisions made based on tool outputs.
-          © 2026 Associate Piyush, Pune.
+          CC Associates is not liable for any decisions made based on tool outputs.
+          © 2026 CC Associates, Pune.
         </p>
       </div>
     </div>

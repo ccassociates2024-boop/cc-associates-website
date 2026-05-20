@@ -324,7 +324,7 @@ export default function TwentyFiveReconPage() {
         )}
 
         <p className="tool-disclaimer">
-          Results are indicative only. Always consult a qualified tax professional for final decisions. Associate Piyush is not liable for any decisions made based on tool outputs. © 2026 Associate Piyush, Pune.
+          Results are indicative only. Always consult a qualified tax professional for final decisions. CC Associates is not liable for any decisions made based on tool outputs. © 2026 CC Associates, Pune.
         </p>
       </div>
     </div>

@@ -30,7 +30,7 @@ const tools = [
 ];
 
 const WA_URL =
-  "https://wa.me/917507354141?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.";
+  "https://wa.me/918421465966?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.";
 
 export default function Footer() {
   return (
@@ -63,20 +63,8 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Phone size={12} className="text-gold-400 flex-shrink-0" />
-                <a href="tel:+917507354141" className="hover:text-white transition-colors">
-                  +91 75073 54141 (Piyush Nimse)
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone size={12} className="text-gold-400 flex-shrink-0" />
                 <a href="tel:+918421465966" className="hover:text-white transition-colors">
-                  +91 84214 65966 (CA Sourabh Chavan)
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail size={12} className="text-gold-400 flex-shrink-0" />
-                <a href="mailto:associate.piyush.nimse@gmail.com" className="hover:text-white transition-colors">
-                  associate.piyush.nimse@gmail.com
+                  +91 84214 65966
                 </a>
               </div>
               <div className="flex items-center gap-2">

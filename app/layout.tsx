@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | CC Associates",
   },
   description:
-    "Professional tax and advisory by CC Associates — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory. Piyush Nimse & CA Sourabh Chavan. Pune. Pan India.",
+    "Professional tax and advisory by CC Associates — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
   keywords: [
     "CC Associates pune",
     "tax consultant pune",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "TDS compliance",
     "statutory audit pune",
     "CA Sourabh Chavan",
-    "Piyush Nimse",
+    "C.A. Sourabh Bhimrao Chavan",
     "litigation support pune",
     "business advisory pune",
     "tax notice reply pune",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: "CC Associates",
     title: "CC Associates — Tax & Advisory Practice | Pune",
     description:
-      "950+ income tax cases. GST, TDS, Audit, Litigation. CA Sourabh Chavan & Piyush Nimse. Since 2025. associate.piyush.nimse@gmail.com",
+      "950+ income tax cases. GST, TDS, Audit, Litigation. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Since 2025. ccassociates2024@gmail.com",
     images: [
       {
         url: "/og-image.png",
@@ -77,12 +77,12 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AccountingService",
   name: "CC Associates",
-  alternateName: "Associate Piyush",
+  alternateName: "CC Associates",
   description:
     "Professional tax and advisory practice — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory. Based in Pune, India.",
   url: "https://associate-piyush-bduu.vercel.app",
-  telephone: "+917507354141",
-  email: "associate.piyush.nimse@gmail.com",
+  telephone: "+918421465966",
+  email: "ccassociates2024@gmail.com",
   foundingDate: "2025",
   areaServed: "India",
   address: {
@@ -104,15 +104,15 @@ const jsonLd = {
   employee: [
     {
       "@type": "Person",
-      name: "Piyush Nimse",
-      jobTitle: "Founding Partner — Tax & Finance",
-      telephone: "+917507354141",
-      email: "associate.piyush.nimse@gmail.com",
+      name: "C.A. Sourabh Bhimrao Chavan",
+      jobTitle: "Founding Partner — Audit & Advisory",
+      telephone: "+918421465966",
+      email: "ccassociates2024@gmail.com",
     },
     {
       "@type": "Person",
-      name: "Sourabh Chavan",
-      jobTitle: "Audit & Advisory Partner (CA)",
+      name: "C.A. Shruti Sourabh Chavan",
+      jobTitle: "Partner — Tax & Compliance",
       telephone: "+918421465966",
       email: "ccassociates2024@gmail.com",
     },

@@ -253,7 +253,7 @@ export default function ServicesPage() {
               <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center mb-3">
                 <span className="text-white font-bold text-sm">PN</span>
               </div>
-              <div className="font-semibold text-[#26215C] mb-0.5">Piyush Nimse</div>
+              <div className="font-semibold text-[#26215C] mb-0.5">CC Associates</div>
               <div className="text-xs text-purple-600 font-medium mb-2">Founding Partner — Tax & Finance</div>
               <div className="text-xs text-[#7F77DD] leading-relaxed">GST, Income Tax, TDS, Forensic Accounting. 950+ cases handled across India.</div>
             </div>

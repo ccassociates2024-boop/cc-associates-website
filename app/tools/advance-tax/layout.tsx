@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "advance tax payment schedule",
     "advance tax calculator india",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/advance-tax" },
+  alternates: { canonical: "https://ccassociates.in/tools/advance-tax" },
   openGraph: {
-    title: "Free Advance Tax Calculator FY 2026-27 | Associate Piyush",
+    title: "Free Advance Tax Calculator FY 2026-27 | CC Associates",
     description: "Calculate advance tax instalments and due dates. Avoid Sec 234B/234C interest.",
-    url: "https://associatepiyush.in/tools/advance-tax",
+    url: "https://ccassociates.in/tools/advance-tax",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

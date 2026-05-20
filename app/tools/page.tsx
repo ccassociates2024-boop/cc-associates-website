@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     "word to pdf converter",
   ],
   alternates: {
-    canonical: "https://associatepiyush.in/tools",
+    canonical: "https://ccassociates.in/tools",
   },
   openGraph: {
-    title: "Free Tax & Finance Tools | Associate Piyush",
+    title: "Free Tax & Finance Tools | CC Associates",
     description:
       "12 free browser-based tools: GST Invoice, TDS Calculator, ITR Estimator, PDF tools & more. No signup needed.",
-    url: "https://associatepiyush.in/tools",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Free Tax Tools - Associate Piyush" }],
+    url: "https://ccassociates.in/tools",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Free Tax Tools - CC Associates" }],
   },
 };
 
@@ -232,7 +232,7 @@ export default function ToolsPage() {
       <section className="bg-white py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs text-muted">
-            <strong className="text-dark">Disclaimer:</strong> All tool results are indicative only. Always consult a qualified tax professional for final decisions. Associate Piyush is not liable for any decisions made based on tool outputs. © 2026 Associate Piyush, Pune.
+            <strong className="text-dark">Disclaimer:</strong> All tool results are indicative only. Always consult a qualified tax professional for final decisions. CC Associates is not liable for any decisions made based on tool outputs. © 2026 CC Associates, Pune.
           </p>
           <p className="text-xs text-muted mt-2">
             Capital Gains tool does not account for Sec 54/54F/54EC reinvestment exemptions, STT paid grandfathering (pre-31 Jan 2018 equity), or partial sale scenarios. Updated for Income-tax Act, 2025.

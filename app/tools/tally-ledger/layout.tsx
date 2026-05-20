@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "free Tally reconciliation",
     "ledger reconciliation online india",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/tally-ledger" },
+  alternates: { canonical: "https://ccassociates.in/tools/tally-ledger" },
   openGraph: {
-    title: "Free Tally Ledger Reconciliation Tool | Associate Piyush",
+    title: "Free Tally Ledger Reconciliation Tool | CC Associates",
     description: "Match Tally ledger with bank statement instantly. Find unreconciled entries. No data stored.",
-    url: "https://associatepiyush.in/tools/tally-ledger",
+    url: "https://ccassociates.in/tools/tally-ledger",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

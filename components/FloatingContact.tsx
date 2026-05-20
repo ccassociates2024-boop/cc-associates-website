@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { Phone, X } from "lucide-react";
 
 const WA_URL =
-  "https://wa.me/917507354141?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.";
-const CALL_URL = "tel:+917507354141";
+  "https://wa.me/918421465966?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.";
+const CALL_URL = "tel:+918421465966";
 
 export default function FloatingContact() {
   const [visible, setVisible] = useState(false);
@@ -53,7 +53,7 @@ export default function FloatingContact() {
           onClick={() => setOpen(false)}
         >
           <Phone size={14} className="flex-shrink-0" />
-          +91 75073 54141
+          +91 84214 65966
         </a>
       </div>
 

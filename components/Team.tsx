@@ -1,21 +1,21 @@
 const partners = [
   {
-    initials: "PN",
-    name: "Piyush Nimse",
-    role: "Founding Partner — Tax & Finance",
-    qualification: "Tax & Finance Consultant",
-    description:
-      "Specialises in Income Tax advisory, GST reconciliation, TDS compliance, forensic accounting, and handling tax notices & assessments. 950+ cases handled across India.",
-    phone: "+91 75073 54141",
-    email: "associate.piyush.nimse@gmail.com",
-  },
-  {
-    initials: "SC",
-    name: "C.A. Sourabh Chavan",
-    role: "Audit & Advisory Partner",
+    initials: "SBC",
+    name: "C.A. Sourabh Bhimrao Chavan",
+    role: "Founding Partner — Audit & Advisory",
     qualification: "Chartered Accountant (ACA)",
     description:
-      "7+ years of practice specialising in Statutory Audit, Tax Litigation, and Business Advisory for Manufacturing, Service, and Startup sectors.",
+      "Specialises in Statutory Audit, Tax Litigation, Business Advisory, and Forensic Accounting. Over 7 years of practice serving manufacturing, service, and startup sectors across India.",
+    phone: "+91 84214 65966",
+    email: "ccassociates2024@gmail.com",
+  },
+  {
+    initials: "SSC",
+    name: "C.A. Shruti Sourabh Chavan",
+    role: "Partner — Tax & Compliance",
+    qualification: "Chartered Accountant (ACA)",
+    description:
+      "Expert in Income Tax advisory, GST reconciliation, TDS compliance, and ITR filing for individuals and businesses. Focused on accurate compliance and maximising client tax savings.",
     phone: "+91 84214 65966",
     email: "ccassociates2024@gmail.com",
   },
@@ -33,7 +33,7 @@ export default function Team() {
         >
           {/* Avatar */}
           <div className="w-14 h-14 rounded-2xl bg-purple-600 flex items-center justify-center mb-4">
-            <span className="text-xl font-semibold text-white">{p.initials}</span>
+            <span className="text-sm font-semibold text-white tracking-tight">{p.initials}</span>
           </div>
 
           {/* Gold accent */}

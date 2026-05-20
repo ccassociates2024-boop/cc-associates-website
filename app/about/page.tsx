@@ -9,10 +9,10 @@ import Team from "@/components/Team";
 export const metadata: Metadata = {
   title: "About CC Associates",
   description:
-    "Meet the team at CC Associates — Piyush Nimse (Tax & Finance) and CA Sourabh Chavan (Audit & Advisory). Expert tax consultants in Pune serving clients across India since 2025.",
+    "Meet the team at CC Associates — C.A. Sourabh Bhimrao Chavan and C.A. Shruti Sourabh Chavan. Expert Chartered Accountants in Pune serving clients across India since 2025.",
   keywords: [
     "CC Associates team",
-    "Piyush Nimse tax consultant pune",
+    "CC Associates tax consultant pune",
     "CA Sourabh Chavan audit pune",
     "forensic accounting specialist pune",
     "GST expert pune",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About CC Associates | Tax & Advisory Firm Pune",
     description:
-      "Piyush Nimse & CA Sourabh Chavan — CC Associates, Pune. GST, Income Tax, TDS, Forensic Accounting, Audit & Business Advisory. Pan India service since 2025.",
+      "C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan — CC Associates, Pune. GST, Income Tax, TDS, Forensic Accounting, Audit & Business Advisory. Pan India service since 2025.",
     url: "https://associate-piyush-bduu.vercel.app/about",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax Consultants Pune" }],
   },
@@ -65,7 +65,7 @@ const stats = [
   { label: "Audit Clients", value: "28+" },
   { label: "GST Clients", value: "150+" },
   { label: "States Covered", value: "15+" },
-  { label: "Free Tools Built", value: "14" },
+  { label: "Free Tools Built", value: "15" },
   { label: "Active Since", value: "2025" },
 ];
 
@@ -129,7 +129,7 @@ export default function AboutPage() {
                     CC Associates was founded on the belief that professional tax and audit services should be accessible, transparent, and genuinely useful — not just compliance boxes ticked on a form. We are a two-partner firm based in Pune, serving clients across India.
                   </p>
                   <p>
-                    The firm combines the tax and forensic expertise of Piyush Nimse with the audit and advisory experience of CA Sourabh Chavan. This dual-specialization allows us to offer end-to-end financial services from GST reconciliation and ITR filing to statutory audits and business advisory under one roof.
+                    The firm combines the tax and forensic expertise of C.A. Shruti Sourabh Chavan with the audit and advisory experience of C.A. Sourabh Bhimrao Chavan. This dual-specialization allows us to offer end-to-end financial services from GST reconciliation and ITR filing to statutory audits and business advisory under one roof.
                   </p>
                   <p>
                     We have handled 950+ tax cases, 28+ audit engagements, and 150+ GST clients across manufacturing, trading, services, real estate, and e-commerce sectors. Our clients range from individual proprietors to multi-crore private limited companies.
@@ -169,12 +169,12 @@ export default function AboutPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-6 h-6 rounded-lg bg-purple-600 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">PN</span>
+                        <span className="text-white text-[9px] font-bold">SBC</span>
                       </div>
-                      <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">Piyush Nimse — Tax & Finance</span>
+                      <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">C.A. Sourabh Bhimrao Chavan — Audit & Advisory</span>
                     </div>
                     <div className="space-y-1.5">
-                      {piyushSpecializations.map(s => (
+                      {sourabhSpecializations.map(s => (
                         <div key={s} className="flex items-start gap-2 text-sm text-[#7F77DD]">
                           <CheckCircle size={13} className="text-green-500 mt-0.5 flex-shrink-0" />
                           <span>{s}</span>
@@ -185,12 +185,12 @@ export default function AboutPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-6 h-6 rounded-lg bg-gold-500 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">SC</span>
+                        <span className="text-white text-[9px] font-bold">SSC</span>
                       </div>
-                      <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">CA Sourabh Chavan — Audit</span>
+                      <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">C.A. Shruti Sourabh Chavan — Tax & Compliance</span>
                     </div>
                     <div className="space-y-1.5">
-                      {sourabhSpecializations.map(s => (
+                      {piyushSpecializations.map(s => (
                         <div key={s} className="flex items-start gap-2 text-sm text-[#7F77DD]">
                           <CheckCircle size={13} className="text-green-500 mt-0.5 flex-shrink-0" />
                           <span>{s}</span>
@@ -211,14 +211,14 @@ export default function AboutPage() {
                 </h3>
                 <div className="space-y-3 text-xs">
                   <div>
-                    <div className="font-semibold text-[#26215C] mb-0.5">Piyush Nimse</div>
-                    <div className="text-[#7F77DD] mb-1">Tax & Finance</div>
-                    <a href="tel:+917507354141" className="text-purple-600 hover:underline block">+91 75073 54141</a>
-                    <a href="mailto:associate.piyush.nimse@gmail.com" className="text-purple-600 hover:underline block truncate">associate.piyush.nimse@gmail.com</a>
+                    <div className="font-semibold text-[#26215C] mb-0.5">C.A. Sourabh Bhimrao Chavan</div>
+                    <div className="text-[#7F77DD] mb-1">Founding Partner — Audit & Advisory</div>
+                    <a href="tel:+918421465966" className="text-purple-600 hover:underline block">+91 84214 65966</a>
+                    <a href="mailto:ccassociates2024@gmail.com" className="text-purple-600 hover:underline block truncate">ccassociates2024@gmail.com</a>
                   </div>
                   <div className="border-t border-purple-50 pt-3">
-                    <div className="font-semibold text-[#26215C] mb-0.5">CA Sourabh Chavan</div>
-                    <div className="text-[#7F77DD] mb-1">Audit & Advisory</div>
+                    <div className="font-semibold text-[#26215C] mb-0.5">C.A. Shruti Sourabh Chavan</div>
+                    <div className="text-[#7F77DD] mb-1">Partner — Tax & Compliance</div>
                     <a href="tel:+918421465966" className="text-purple-600 hover:underline block">+91 84214 65966</a>
                     <a href="mailto:ccassociates2024@gmail.com" className="text-purple-600 hover:underline block">ccassociates2024@gmail.com</a>
                   </div>

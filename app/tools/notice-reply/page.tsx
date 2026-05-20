@@ -8,11 +8,11 @@ import {
 import Link from "next/link";
 
 // ── Firm constants ───────────────────────────────────────────────────────────
-const FIRM_NAME = "Associate Piyush";
+const FIRM_NAME = "CC Associates";
 const FIRM_ADDR = "Pune, Maharashtra";
-const FIRM_PHONE = "+91 75073 54141";
-const FIRM_EMAIL = "associate.piyush.nimse@gmail.com";
-const WA_URL = "https://wa.me/917507354141?text=Hello%20Associate%20Piyush%2C%20I%20need%20help%20with%20an%20Income%20Tax%20notice.";
+const FIRM_PHONE = "+91 84214 65966";
+const FIRM_EMAIL = "ccassociates2024@gmail.com";
+const WA_URL = "https://wa.me/918421465966?text=Hello%20Associate%20Piyush%2C%20I%20need%20help%20with%20an%20Income%20Tax%20notice.";
 
 // ── Notice Types ─────────────────────────────────────────────────────────────
 const NOTICE_TYPES = [

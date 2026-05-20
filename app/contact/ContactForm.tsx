@@ -1,25 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowRight, CheckCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowRight, CheckCircle, Shield } from "lucide-react";
 
-const WA_NUM = "917507354141";
+const PHONE = "+91 84214 65966";
+const PHONE_RAW = "918421465966";
+const EMAIL = "ccassociates2024@gmail.com";
+const WA_BASE = `https://wa.me/${PHONE_RAW}`;
+const WA_QUICK = `${WA_BASE}?text=${encodeURIComponent(
+  "Hello CC Associates, I need tax and advisory consultation. Please get back to me."
+)}`;
+
 const SERVICES = [
-  "Income Tax Filing",
-  "GST Compliance",
+  "GST Reconciliation",
+  "Income Tax Filing (ITR)",
   "TDS Compliance",
   "Statutory Audit",
-  "Litigation Support",
-  "Business Advisory",
-  "Tax Notice Reply",
   "Forensic Accounting",
+  "Tax Notice Reply",
+  "Business Advisory",
+  "Litigation Support",
+  "Capital Gains Tax",
   "Other",
 ];
 
 export default function ContactForm() {
   const [form, setForm] = useState({
     name: "",
-    email: "",
     phone: "",
     service: "",
     message: "",
@@ -30,10 +37,15 @@ export default function ContactForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const text = encodeURIComponent(
-      `*New Inquiry — CC Associates*\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nService: ${form.service}\n\nMessage: ${form.message}`
-    );
-    window.open(`https://wa.me/${WA_NUM}?text=${text}`, "_blank");
+    const text =
+      `*Inquiry — CC Associates*\n\n` +
+      `Hi CC Associates,\n\n` +
+      `I'm *${form.name || "—"}* and I need assistance with *${form.service || "Tax Consultation"}*.\n\n` +
+      `📱 My Phone: ${form.phone || "—"}\n` +
+      (form.message ? `📝 Details: ${form.message}\n\n` : "\n") +
+      `Please get back to me at your earliest convenience.\n\n` +
+      `— via CCAssociates.in`;
+    window.open(`${WA_BASE}?text=${encodeURIComponent(text)}`, "_blank");
   }
 
   const inputCls =
@@ -56,59 +68,42 @@ export default function ContactForm() {
           {/* ── Left: Info Cards ── */}
           <div className="lg:col-span-2 space-y-4">
 
-            {/* Phone */}
-            <div className="bg-white rounded-2xl border border-purple-100 p-5">
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                  <Phone size={16} className="text-purple-600" />
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-[#26215C] uppercase tracking-wide mb-1">Primary Contact</div>
-                  <a href="tel:+917507354141" className="text-sm font-semibold text-purple-600 hover:underline block">
-                    +91 75073 54141
-                  </a>
-                  <div className="text-xs text-[#7F77DD]">Piyush Nimse — Tax & Finance</div>
-                  <a href="tel:+918421465966" className="text-sm font-semibold text-purple-600 hover:underline block mt-1">
-                    +91 84214 65966
-                  </a>
-                  <div className="text-xs text-[#7F77DD]">CA Sourabh Chavan — Audit & Advisory</div>
-                </div>
-              </div>
-            </div>
-
-            {/* WhatsApp */}
-            <a
-              href={`https://wa.me/${WA_NUM}?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white rounded-2xl border border-purple-100 p-5 flex items-start gap-3 hover:border-green-200 hover:bg-green-50 transition-all duration-200"
-            >
-              <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
-                <MessageCircle size={16} className="text-green-600" />
+            {/* Call */}
+            <a href={`tel:${PHONE_RAW}`}
+               className="bg-white rounded-2xl border border-purple-100 p-5 flex items-center gap-3 hover:border-purple-200 hover:shadow-sm transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                <Phone size={18} className="text-purple-600" />
               </div>
               <div>
-                <div className="text-xs font-semibold text-[#26215C] uppercase tracking-wide mb-1">WhatsApp</div>
-                <div className="text-sm font-semibold text-green-600">Chat instantly on WhatsApp</div>
-                <div className="text-xs text-[#7F77DD]">Fastest response — usually within hours</div>
+                <div className="text-[10px] font-semibold text-[#26215C] uppercase tracking-wide mb-0.5">Call Directly</div>
+                <div className="text-sm font-semibold text-purple-600">{PHONE}</div>
+                <div className="text-xs text-[#7F77DD]">Mon–Sat, 10 AM – 7 PM IST</div>
               </div>
             </a>
 
-            {/* Email */}
-            <div className="bg-white rounded-2xl border border-purple-100 p-5">
+            {/* WhatsApp */}
+            <a href={WA_QUICK} target="_blank" rel="noopener noreferrer"
+               className="bg-[#25D366] rounded-2xl p-5 flex items-center gap-3 hover:bg-[#1ebe5d] transition-all duration-200 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                <MessageCircle size={18} className="text-white" />
+              </div>
+              <div>
+                <div className="text-[10px] font-semibold text-white/80 uppercase tracking-wide mb-0.5">WhatsApp</div>
+                <div className="text-sm font-semibold text-white">Chat on WhatsApp</div>
+                <div className="text-xs text-white/80">{PHONE}</div>
+              </div>
+            </a>
+
+            {/* Email — gold bordered */}
+            <div className="bg-white rounded-2xl border-2 border-gold-400 p-5">
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                  <Mail size={16} className="text-purple-600" />
+                <div className="w-10 h-10 rounded-xl bg-gold-400/10 flex items-center justify-center flex-shrink-0">
+                  <Mail size={18} className="text-gold-500" />
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-[#26215C] uppercase tracking-wide mb-1">Email</div>
-                  <a href="mailto:associate.piyush.nimse@gmail.com" className="text-xs text-purple-600 hover:underline block">
-                    associate.piyush.nimse@gmail.com
-                  </a>
-                  <div className="text-xs text-[#7F77DD]">Tax, GST, TDS, ITR queries</div>
-                  <a href="mailto:ccassociates2024@gmail.com" className="text-xs text-purple-600 hover:underline block mt-1">
-                    ccassociates2024@gmail.com
-                  </a>
-                  <div className="text-xs text-[#7F77DD]">Audit queries — CA Sourabh Chavan</div>
+                  <div className="text-[10px] font-semibold text-[#26215C] uppercase tracking-wide mb-0.5">Email Us</div>
+                  <a href={`mailto:${EMAIL}`} className="text-sm font-semibold text-gold-600 hover:underline block">{EMAIL}</a>
+                  <div className="text-xs text-[#7F77DD] mt-0.5">Tax, Audit & Advisory queries</div>
                 </div>
               </div>
             </div>
@@ -155,71 +150,69 @@ export default function ContactForm() {
           {/* ── Right: Smart WA Form ── */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-2xl border border-purple-100 p-6 md:p-8">
-              <h2 className="text-lg font-semibold text-[#26215C] mb-1">Send an Inquiry</h2>
-              <p className="text-xs text-[#7F77DD] mb-6">
-                Fill in the form — we&apos;ll open WhatsApp with your details pre-filled for instant delivery.
-              </p>
+              <div className="flex items-center gap-3 mb-1">
+                <div className="w-10 h-10 rounded-xl bg-[#25D366] flex items-center justify-center flex-shrink-0">
+                  <MessageCircle size={18} className="text-white" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-[#26215C]">Quick WhatsApp Inquiry</h2>
+                  <p className="text-xs text-[#7F77DD]">Sends directly to CC Associates — responds within 2 hours</p>
+                </div>
+              </div>
+
+              {/* Message Preview */}
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-xs text-green-900 font-mono leading-relaxed">
+                <div className="text-[10px] text-green-600 font-semibold uppercase tracking-wide mb-1.5">Message Preview (example)</div>
+                <div className="whitespace-pre-line">{`*Inquiry — CC Associates*\n\nHi CC Associates,\n\nI'm *Rahul Sharma* and I need assistance with *Income Tax Filing*.\n\n📱 My Phone: +91 98765 43210\n📝 Details: I need to file ITR for FY 2025-26.\n\n— via CCAssociates.in`}</div>
+              </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    {lbl("Full Name", true)}
+                    {lbl("Your Name", true)}
                     <input
                       type="text"
                       required
                       className={inputCls}
-                      placeholder="e.g. Piyush Nimse"
+                      placeholder="e.g. Rahul Sharma"
                       value={form.name}
                       onChange={(e) => set("name", e.target.value)}
                     />
                   </div>
                   <div>
-                    {lbl("Email Address", true)}
-                    <input
-                      type="email"
-                      required
-                      className={inputCls}
-                      placeholder="e.g. you@example.com"
-                      value={form.email}
-                      onChange={(e) => set("email", e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    {lbl("Phone / WhatsApp")}
+                    {lbl("Phone / WhatsApp", true)}
                     <input
                       type="tel"
+                      required
                       className={inputCls}
-                      placeholder="+91 XXXXX XXXXX"
+                      placeholder="+91 9XXXXXXXXX"
                       value={form.phone}
                       onChange={(e) => set("phone", e.target.value)}
                     />
                   </div>
-                  <div>
-                    {lbl("Service Required", true)}
-                    <select
-                      required
-                      className={inputCls}
-                      value={form.service}
-                      onChange={(e) => set("service", e.target.value)}
-                    >
-                      <option value="">Select a service...</option>
-                      {SERVICES.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
-                  </div>
                 </div>
 
                 <div>
-                  {lbl("Message", true)}
-                  <textarea
+                  {lbl("Service Required", true)}
+                  <select
                     required
-                    rows={4}
+                    className={inputCls}
+                    value={form.service}
+                    onChange={(e) => set("service", e.target.value)}
+                  >
+                    <option value="">Select a service...</option>
+                    {SERVICES.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  {lbl("Additional Details")}
+                  <textarea
+                    rows={3}
                     className={inputCls + " resize-none"}
-                    placeholder="Briefly describe your requirement..."
+                    placeholder="Briefly describe your requirement (optional)..."
                     value={form.message}
                     onChange={(e) => set("message", e.target.value)}
                   />
@@ -227,18 +220,18 @@ export default function ContactForm() {
 
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-gold-500 text-white
-                             hover:bg-gold-400 rounded-xl px-5 py-3.5 text-sm font-medium
+                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white
+                             hover:bg-[#1ebe5d] rounded-xl px-5 py-3.5 text-sm font-semibold
                              transition-all duration-200 shadow-sm"
                 >
                   <MessageCircle size={16} />
-                  Send via WhatsApp
-                  <ArrowRight size={15} />
+                  Send to CC Associates via WhatsApp →
                 </button>
 
-                <p className="text-center text-xs text-[#7F77DD]">
-                  Confidential. No spam. We respond within 2 business days.
-                </p>
+                <div className="flex items-center justify-center gap-2 text-xs text-[#7F77DD]">
+                  <Shield size={11} className="text-green-500" />
+                  Confidential · No spam · Responds within 2 hours
+                </div>
               </form>
             </div>
           </div>

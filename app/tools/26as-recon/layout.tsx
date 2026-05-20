@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "free 26AS checker",
     "26AS mismatch finder",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/26as-recon" },
+  alternates: { canonical: "https://ccassociates.in/tools/26as-recon" },
   openGraph: {
-    title: "Free 26AS Reconciliation Tool | Associate Piyush",
+    title: "Free 26AS Reconciliation Tool | CC Associates",
     description: "Match Form 26AS TDS with your books. Find mismatches instantly. No data stored.",
-    url: "https://associatepiyush.in/tools/26as-recon",
+    url: "https://ccassociates.in/tools/26as-recon",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

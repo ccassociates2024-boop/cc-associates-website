@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "shrink PDF online",
     "PDF size reducer",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/pdf-compress" },
+  alternates: { canonical: "https://ccassociates.in/tools/pdf-compress" },
   openGraph: {
-    title: "Free PDF Compressor | Associate Piyush",
+    title: "Free PDF Compressor | CC Associates",
     description: "Reduce PDF file size instantly. No quality loss. 100% private — files stay in your browser.",
-    url: "https://associatepiyush.in/tools/pdf-compress",
+    url: "https://ccassociates.in/tools/pdf-compress",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

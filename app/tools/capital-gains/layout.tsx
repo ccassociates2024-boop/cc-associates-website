@@ -14,12 +14,12 @@ export const metadata: Metadata = {
     "indexation benefit property",
     "capital gains calculator FY 2026-27",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/capital-gains" },
+  alternates: { canonical: "https://ccassociates.in/tools/capital-gains" },
   openGraph: {
-    title: "Capital Gains Tax Calculator FY 2026-27 | Associate Piyush",
+    title: "Capital Gains Tax Calculator FY 2026-27 | CC Associates",
     description:
       "Calculate STCG & LTCG on equity, mutual funds & property. Indexation, exemptions, surcharge & cess — FY 2026-27.",
-    url: "https://associatepiyush.in/tools/capital-gains",
+    url: "https://ccassociates.in/tools/capital-gains",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

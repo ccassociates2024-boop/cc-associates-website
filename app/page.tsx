@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight, RefreshCw, Search, Calculator, ClipboardCheck,
-  BarChart3, Briefcase, Shield, FileText,
+  BarChart3, Briefcase, Shield, FileText, CheckCircle,
 } from "lucide-react";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     absolute: "CC Associates | Tax Advisory, GST, Audit & Litigation | Pune, India",
   },
   description:
-    "CC Associates — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory in Pune. Piyush Nimse & CA Sourabh Chavan. Pan India.",
+    "CC Associates — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory in Pune. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pan India.",
   keywords: [
     "CC Associates pune",
     "tax consultant pune",
@@ -22,13 +22,13 @@ export const metadata: Metadata = {
     "statutory audit pune",
     "litigation support pune",
     "forensic accounting pune",
-    "Piyush Nimse",
+    "C.A. Sourabh Bhimrao Chavan",
   ],
   alternates: { canonical: "https://associate-piyush-bduu.vercel.app" },
   openGraph: {
     title: "CC Associates | Tax Advisory, GST, Audit & Litigation | Pune",
     description:
-      "950+ income tax cases. Expert GST, TDS, Audit & Litigation services. CA Sourabh Chavan & Piyush Nimse. Pune. Pan India.",
+      "950+ income tax cases. Expert GST, TDS, Audit & Litigation services. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
     url: "https://associate-piyush-bduu.vercel.app",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax & Advisory Practice Pune" }],
   },
@@ -94,7 +94,7 @@ const trustBadges = [
 ];
 
 const WA_URL =
-  "https://wa.me/917507354141?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.";
+  "https://wa.me/918421465966?text=Hello%20CC%20Associates%2C%20I%20need%20tax%20and%20advisory%20consultation.";
 
 export default function HomePage() {
   return (
@@ -182,8 +182,8 @@ export default function HomePage() {
                 </p>
                 <div className="space-y-2 text-xs text-[#7F77DD]">
                   <div>📍 Pune, Maharashtra</div>
-                  <div>📞 +91 75073 54141</div>
-                  <div>✉️ associate.piyush.nimse@gmail.com</div>
+                  <div>📞 +91 84214 65966</div>
+                  <div>✉️ ccassociates2024@gmail.com</div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-purple-50 flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -298,11 +298,11 @@ export default function HomePage() {
                 Free Tools
               </p>
               <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-[#26215C] mb-3">
-                14 Professional Tax Tools — Free Forever
+                15 Professional Tax Tools — Free Forever
               </h2>
               <div className="w-12 h-0.5 bg-gold-500 mb-5" />
               <p className="text-[#7F77DD] text-sm leading-relaxed mb-6">
-                GST Invoice Generator, ITR Estimator, Capital Gains Calculator, Notice Reply Generator, TDS Calculator, and 9 more — all 100% browser-based. No login. No data stored.
+                Personal Finance Dashboard, GST Invoice Generator, ITR Estimator, Capital Gains Calculator, Notice Reply Generator, TDS Calculator, and 9 more — all 100% browser-based. No login. No data stored.
               </p>
               <div className="flex items-center gap-2 bg-purple-50 border border-purple-100 rounded-xl px-4 py-3 text-xs text-purple-700 mb-6">
                 <Shield size={14} className="text-purple-600 flex-shrink-0" />
@@ -314,7 +314,7 @@ export default function HomePage() {
                            hover:bg-purple-800 rounded-xl px-5 py-2.5 text-sm font-medium
                            transition-all duration-200 shadow-sm"
               >
-                Explore All 14 Tools <ArrowRight size={15} />
+                Explore All 15 Tools <ArrowRight size={15} />
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -337,6 +337,98 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Income Tax Highlight ─────────────────────────────────────────── */}
+      <section className="py-20 bg-surface">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs bg-gold-400/10 text-gold-600
+                              border border-gold-300 rounded-full px-3 py-1 mb-4 font-medium">
+                <Calculator size={11} /> Income Tax Advisory
+              </div>
+              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-[#26215C] mb-4">
+                Old vs New Regime —{" "}
+                <span className="text-purple-600">Know Which Saves More</span>
+              </h2>
+              <div className="w-12 h-0.5 bg-gold-500 mb-5" />
+              <p className="text-[#7F77DD] text-sm leading-relaxed mb-6">
+                Under Finance Act 2025, the New Regime offers zero tax up to ₹12 lakh. But Old Regime with 80C, 80D, and HRA can still win for high-deduction earners. We run a live comparison for your exact numbers.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                {[
+                  "ITR-1 to ITR-6 filing",
+                  "Old vs New regime comparison",
+                  "80C / 80D optimisation",
+                  "Capital gains (STCG/LTCG) planning",
+                  "Scrutiny & notice handling",
+                  "Appeals before CIT(A) / ITAT",
+                ].map((pt) => (
+                  <div key={pt} className="flex items-start gap-2 text-xs text-[#7F77DD]">
+                    <CheckCircle size={13} className="text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>{pt}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/services#income-tax"
+                  className="inline-flex items-center gap-2 bg-purple-600 text-white
+                             hover:bg-purple-800 rounded-xl px-5 py-2.5 text-sm font-medium
+                             transition-all duration-200 shadow-sm">
+                  View Details <ArrowRight size={15} />
+                </Link>
+                <Link href="/tools/itr-estimator"
+                  className="inline-flex items-center gap-2 bg-purple-50 text-purple-800
+                             border border-purple-200 hover:bg-purple-100 rounded-xl px-5 py-2.5
+                             text-sm font-medium transition-all duration-200">
+                  <Calculator size={14} /> Free ITR Estimator
+                </Link>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                {
+                  label: "New Regime (FY 2026-27)",
+                  rate: "Zero tax up to ₹12L",
+                  note: "Standard deduction ₹75,000. Best for salaried with fewer deductions.",
+                  accent: "#C9A84C",
+                },
+                {
+                  label: "Old Regime",
+                  rate: "₹50K std. deduction",
+                  note: "Add 80C (₹1.5L) + 80D + HRA + NPS — can save more for high-deduction earners.",
+                  accent: "#7C3AED",
+                },
+              ].map(({ label, rate, note, accent }) => (
+                <div key={label}
+                  className="bg-white rounded-2xl border border-purple-100 p-5"
+                  style={{ borderLeft: `3px solid ${accent}` }}>
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="font-semibold text-sm text-[#26215C]">{label}</div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap"
+                      style={{ background: `${accent}18`, color: accent }}>{rate}</span>
+                  </div>
+                  <p className="text-xs text-[#7F77DD] leading-relaxed">{note}</p>
+                </div>
+              ))}
+              <div className="bg-purple-50 border border-purple-200 rounded-2xl p-5">
+                <div className="text-xs font-semibold uppercase tracking-wide text-gold-600 mb-1">Our Free Tool</div>
+                <div className="font-semibold text-sm text-[#26215C] mb-1">ITR Tax Estimator — FY 2026-27</div>
+                <p className="text-xs text-[#7F77DD] leading-relaxed mb-3">
+                  Enter income &amp; deductions → see both regimes side by side instantly.
+                </p>
+                <Link href="/tools/itr-estimator"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-purple-600 hover:underline">
+                  Open Tool <ArrowRight size={11} />
+                </Link>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -365,16 +457,16 @@ export default function HomePage() {
               WhatsApp for Free Consultation
             </a>
             <a
-              href="tel:+917507354141"
+              href="tel:+918421465966"
               className="inline-flex items-center gap-2 bg-purple-600 text-white
                          hover:bg-purple-800 rounded-xl px-6 py-3 text-sm font-medium
                          transition-all duration-200"
             >
-              +91 75073 54141
+              +91 84214 65966
             </a>
           </div>
           <p className="text-purple-400 text-xs mt-5">
-            associate.piyush.nimse@gmail.com · Pune, Maharashtra · Since 2025
+            ccassociates2024@gmail.com · Pune, Maharashtra · Since 2025
           </p>
         </div>
       </section>

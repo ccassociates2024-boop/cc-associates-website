@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "transaction summary tool",
     "free bank statement tool india",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/bank-statement" },
+  alternates: { canonical: "https://ccassociates.in/tools/bank-statement" },
   openGraph: {
-    title: "Free Bank Statement Analyser | Associate Piyush",
+    title: "Free Bank Statement Analyser | CC Associates",
     description: "Upload bank statement CSV and get instant expense summary & insights. 100% private.",
-    url: "https://associatepiyush.in/tools/bank-statement",
+    url: "https://ccassociates.in/tools/bank-statement",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

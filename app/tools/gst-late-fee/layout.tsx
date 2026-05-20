@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "GST penalty calculator",
     "GST delay penalty india",
   ],
-  alternates: { canonical: "https://associatepiyush.in/tools/gst-late-fee" },
+  alternates: { canonical: "https://ccassociates.in/tools/gst-late-fee" },
   openGraph: {
-    title: "Free GST Late Fee Calculator | Associate Piyush",
+    title: "Free GST Late Fee Calculator | CC Associates",
     description: "Calculate GSTR-1, GSTR-3B, GSTR-9 late fees instantly. CGST + SGST breakup included.",
-    url: "https://associatepiyush.in/tools/gst-late-fee",
+    url: "https://ccassociates.in/tools/gst-late-fee",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

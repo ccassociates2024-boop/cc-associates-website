@@ -387,7 +387,7 @@ export default function Dashboard() {
             <h2 className="text-xl font-bold text-white mb-1">Welcome to Your Finance Dashboard</h2>
             <p className="text-purple-400 text-sm mb-6">Free, private, no login. All data stays in your browser.</p>
             <div className="space-y-4 mb-6">
-              <Input label="Your Name" placeholder="e.g. Piyush Nimse" value={welcomeForm.name}
+              <Input label="Your Name" placeholder="e.g. CC Associates" value={welcomeForm.name}
                 onChange={e => setWelcomeForm(f => ({ ...f, name: e.target.value }))} />
               <Input label="Your Age" type="number" placeholder="30" value={welcomeForm.age}
                 onChange={e => setWelcomeForm(f => ({ ...f, age: e.target.value }))} />
