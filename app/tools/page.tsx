@@ -22,13 +22,13 @@ export const metadata: Metadata = {
     "word to pdf converter",
   ],
   alternates: {
-    canonical: "https://ccassociates.in/tools",
+    canonical: "https://cc-associates-website.vercel.app/tools",
   },
   openGraph: {
     title: "Free Tax & Finance Tools | CC Associates",
     description:
       "12 free browser-based tools: GST Invoice, TDS Calculator, ITR Estimator, PDF tools & more. No signup needed.",
-    url: "https://ccassociates.in/tools",
+    url: "https://cc-associates-website.vercel.app/tools",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Free Tax Tools - CC Associates" }],
   },
 };

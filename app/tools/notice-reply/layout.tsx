@@ -14,12 +14,12 @@ export const metadata: Metadata = {
     "section 245 refund adjustment reply",
     "income tax demand notice reply",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/notice-reply" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/notice-reply" },
   openGraph: {
     title: "Income Tax Notice Reply Generator | CC Associates",
     description:
       "Generate professional IT notice replies for Sec 143(1), 148A, 139(9), 245, 156, 131. Free draft in 60 seconds.",
-    url: "https://ccassociates.in/tools/notice-reply",
+    url: "https://cc-associates-website.vercel.app/tools/notice-reply",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

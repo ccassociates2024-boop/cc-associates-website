@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "free word to PDF",
     "word document to PDF browser",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/word-to-pdf" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/word-to-pdf" },
   openGraph: {
     title: "Free Word to PDF Converter | CC Associates",
     description: "Convert .docx to PDF instantly in your browser. 100% private — no file upload.",
-    url: "https://ccassociates.in/tools/word-to-pdf",
+    url: "https://cc-associates-website.vercel.app/tools/word-to-pdf",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

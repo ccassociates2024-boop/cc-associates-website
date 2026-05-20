@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     "TDS on rent calculator",
     "TDS calculator free",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/tds-calculator" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/tds-calculator" },
   openGraph: {
     title: "Free TDS Calculator FY 2026-27 | CC Associates",
     description: "Calculate TDS under all sections instantly — salary, contractor, rent, professional fees. FY 2026-27.",
-    url: "https://ccassociates.in/tools/tds-calculator",
+    url: "https://cc-associates-website.vercel.app/tools/tds-calculator",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

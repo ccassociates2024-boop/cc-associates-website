@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "GSTR-2A vs purchase register",
     "free GST reconciliation tool",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/gstr2a-recon" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/gstr2a-recon" },
   openGraph: {
     title: "Free GSTR-2A Reconciliation Tool | CC Associates",
     description: "Match your purchase register with GSTR-2A instantly. Find ITC mismatches. No data stored.",
-    url: "https://ccassociates.in/tools/gstr2a-recon",
+    url: "https://cc-associates-website.vercel.app/tools/gstr2a-recon",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

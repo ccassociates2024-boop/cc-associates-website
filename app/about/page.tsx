@@ -20,13 +20,13 @@ export const metadata: Metadata = {
     "about CC Associates",
   ],
   alternates: {
-    canonical: "https://associate-piyush-bduu.vercel.app/about",
+    canonical: "https://cc-associates-website.vercel.app/about",
   },
   openGraph: {
     title: "About CC Associates | Tax & Advisory Firm Pune",
     description:
       "C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan — CC Associates, Pune. GST, Income Tax, TDS, Forensic Accounting, Audit & Business Advisory. Pan India service since 2025.",
-    url: "https://associate-piyush-bduu.vercel.app/about",
+    url: "https://cc-associates-website.vercel.app/about",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax Consultants Pune" }],
   },
 };

@@ -192,7 +192,7 @@ export default function GSTInvoicePage() {
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
-      doc.text("This is a computer generated invoice. | CC Associates, Pune | contact@ccassociates.in", 105, pageH - 6, { align: "center" });
+      doc.text("This is a computer generated invoice. | CC Associates, Pune | contact@cc-associates-website.vercel.app", 105, pageH - 6, { align: "center" });
 
       doc.save(`GST_Invoice_${invoice.number || "draft"}.pdf`);
     } catch (e) {

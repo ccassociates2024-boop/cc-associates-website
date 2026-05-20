@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     "income tax resources",
   ],
   alternates: {
-    canonical: "https://ccassociates.in/resources",
+    canonical: "https://cc-associates-website.vercel.app/resources",
   },
   openGraph: {
     title: "Free Tax & Finance Guides | CC Associates",
     description:
       "Expert tax guides: GST ITC, TDS, Old vs New Regime, GSTR-9, Forensic Accounting & more — free resources by CC Associates.",
-    url: "https://ccassociates.in/resources",
+    url: "https://cc-associates-website.vercel.app/resources",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Tax Resources - CC Associates" }],
   },
 };

@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "HSN code invoice",
     "CGST SGST invoice generator",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/gst-invoice" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/gst-invoice" },
   openGraph: {
     title: "Free GST Invoice Generator | CC Associates",
     description: "Create GST-compliant invoices instantly — CGST, SGST, IGST. Download as PDF. No signup.",
-    url: "https://ccassociates.in/tools/gst-invoice",
+    url: "https://cc-associates-website.vercel.app/tools/gst-invoice",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

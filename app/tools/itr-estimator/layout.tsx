@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     "new tax regime slab",
     "income tax estimator india",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/itr-estimator" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/itr-estimator" },
   openGraph: {
     title: "Free ITR Tax Estimator FY 2026-27 | CC Associates",
     description: "Compare Old vs New Tax Regime. New regime: zero tax up to ₹12L. Updated for Income-tax Act 2025.",
-    url: "https://ccassociates.in/tools/itr-estimator",
+    url: "https://cc-associates-website.vercel.app/tools/itr-estimator",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

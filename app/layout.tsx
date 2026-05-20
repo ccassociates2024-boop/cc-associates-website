@@ -35,11 +35,11 @@ export const metadata: Metadata = {
   authors: [{ name: "CC Associates" }],
   creator: "CC Associates",
   publisher: "CC Associates",
-  metadataBase: new URL("https://associate-piyush-bduu.vercel.app"),
+  metadataBase: new URL("https://cc-associates-website.vercel.app"),
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://associate-piyush-bduu.vercel.app",
+    url: "https://cc-associates-website.vercel.app",
     siteName: "CC Associates",
     title: "CC Associates — Tax & Advisory Practice | Pune",
     description:
@@ -80,7 +80,7 @@ const jsonLd = {
   alternateName: "CC Associates",
   description:
     "Professional tax and advisory practice — 950+ income tax cases, GST compliance, TDS, statutory audit, litigation & business advisory. Based in Pune, India.",
-  url: "https://associate-piyush-bduu.vercel.app",
+  url: "https://cc-associates-website.vercel.app",
   telephone: "+918421465966",
   email: "ccassociates2024@gmail.com",
   foundingDate: "2025",

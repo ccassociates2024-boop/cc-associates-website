@@ -20,13 +20,13 @@ export const metadata: Metadata = {
     "business advisory pune",
   ],
   alternates: {
-    canonical: "https://associate-piyush-bduu.vercel.app/services",
+    canonical: "https://cc-associates-website.vercel.app/services",
   },
   openGraph: {
     title: "Tax & Advisory Services | CC Associates",
     description:
       "GST, Forensic Accounting, Income Tax, TDS, Audit, Litigation & Business Advisory. CC Associates, Pune. Pan India.",
-    url: "https://associate-piyush-bduu.vercel.app/services",
+    url: "https://cc-associates-website.vercel.app/services",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax Services Pune" }],
   },
 };

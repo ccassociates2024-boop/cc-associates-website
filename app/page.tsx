@@ -24,12 +24,12 @@ export const metadata: Metadata = {
     "forensic accounting pune",
     "C.A. Sourabh Bhimrao Chavan",
   ],
-  alternates: { canonical: "https://associate-piyush-bduu.vercel.app" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app" },
   openGraph: {
     title: "CC Associates | Tax Advisory, GST, Audit & Litigation | Pune",
     description:
       "950+ income tax cases. Expert GST, TDS, Audit & Litigation services. C.A. Sourabh Bhimrao Chavan & C.A. Shruti Sourabh Chavan. Pune. Pan India.",
-    url: "https://associate-piyush-bduu.vercel.app",
+    url: "https://cc-associates-website.vercel.app",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CC Associates - Tax & Advisory Practice Pune" }],
   },
 };

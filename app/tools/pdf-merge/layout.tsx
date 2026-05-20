@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     "PDF combiner free",
     "merge PDF browser",
   ],
-  alternates: { canonical: "https://ccassociates.in/tools/pdf-merge" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/tools/pdf-merge" },
   openGraph: {
     title: "Free PDF Merge Tool | CC Associates",
     description: "Merge multiple PDFs into one. Drag, drop, reorder, download. 100% private — no upload.",
-    url: "https://ccassociates.in/tools/pdf-merge",
+    url: "https://cc-associates-website.vercel.app/tools/pdf-merge",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };

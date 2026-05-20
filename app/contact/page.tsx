@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     "tax consultation pune",
     "GST consultant contact pune",
   ],
-  alternates: { canonical: "https://associate-piyush-bduu.vercel.app/contact" },
+  alternates: { canonical: "https://cc-associates-website.vercel.app/contact" },
   openGraph: {
     title: "Contact CC Associates | Tax & Advisory Pune",
     description:
       "WhatsApp or call +91 84214 65966. First consultation free. GST, Income Tax, TDS, Audit & Litigation — Pune & Pan India.",
-    url: "https://associate-piyush-bduu.vercel.app/contact",
+    url: "https://cc-associates-website.vercel.app/contact",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };
