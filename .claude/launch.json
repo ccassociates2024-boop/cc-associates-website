@@ -2,16 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "Associate Piyush — Dev Server",
+      "name": "CC Associates — Dev Server",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000
-    },
-    {
-      "name": "Associate Piyush — Production Preview",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "start"],
-      "port": 3000
+      "runtimeArgs": ["run", "dev", "--", "-p", "3003"],
+      "port": 3003
     }
   ]
 }
