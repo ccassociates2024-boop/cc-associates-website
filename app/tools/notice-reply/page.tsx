@@ -500,7 +500,7 @@ export default function NoticeReplyPage() {
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 {lbl("Assessee Name")}
-                <input type="text" className={inputCls} placeholder="e.g. Piyush Nimse" value={form.assesseeName} onChange={e => set("assesseeName", e.target.value)} />
+                <input type="text" className={inputCls} placeholder="e.g. Rahul Sharma" value={form.assesseeName} onChange={e => set("assesseeName", e.target.value)} />
               </div>
               <div>
                 {lbl("PAN Number")}

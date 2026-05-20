@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import * as XLSX from "xlsx";
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Legend
@@ -47,7 +48,17 @@ type AppData = {
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
-const STORAGE_KEY = "cc-associates-finance-v1";
+const STORAGE_KEY    = "cc-associates-finance-v1"; // guest / legacy
+const PROFILES_KEY   = "ap-finance-profiles";
+const DATA_PREFIX    = "ap-finance-data-";
+const PROFILE_COLORS = ["#534AB7","#B8973A","#22C55E","#EF4444","#3B82F6","#8B5CF6","#F59E0B","#06B6D4"];
+
+interface Profile { id: string; name: string; pinHash: string; color: string; createdAt: string; }
+
+async function sha256(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
 const PURPLE = "#534AB7";
 const GOLD = "#B8973A";
 const COLORS = [PURPLE, GOLD, "#7F77DD", "#C9A84C", "#3C3489", "#E8A838", "#9C95E5", "#D4B56A"];
@@ -198,12 +209,12 @@ const Select = ({ label, children, ...props }: { label: string } & React.SelectH
     <select {...props} className="w-full bg-[#0F0D1E] border border-purple-800/60 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500">{children}</select>
   </label>
 );
-const Btn = ({ children, onClick, variant = "primary", className = "", type = "button" }:
-  { children: React.ReactNode; onClick?: () => void; variant?: "primary"|"gold"|"ghost"; className?: string; type?: "button"|"submit" }) => {
+const Btn = ({ children, onClick, variant = "primary", className = "", type = "button", title }:
+  { children: React.ReactNode; onClick?: () => void; variant?: "primary"|"gold"|"ghost"; className?: string; type?: "button"|"submit"; title?: string }) => {
   const cls = variant === "primary" ? "bg-purple-600 hover:bg-purple-700 text-white"
     : variant === "gold" ? "bg-[#B8973A] hover:bg-[#C9A84C] text-white"
     : "border border-purple-700 text-purple-300 hover:bg-purple-900/40";
-  return <button type={type} onClick={onClick} className={`${cls} rounded-xl px-4 py-2 text-sm font-medium transition-colors flex items-center gap-1.5 ${className}`}>{children}</button>;
+  return <button type={type} onClick={onClick} title={title} className={`${cls} rounded-xl px-4 py-2 text-sm font-medium transition-colors flex items-center gap-1.5 ${className}`}>{children}</button>;
 };
 const Badge = ({ children, color = "purple" }: { children: React.ReactNode; color?: string }) => {
   const cls = color === "green" ? "bg-green-900/30 text-green-400 border-green-800/40"
@@ -253,25 +264,57 @@ export default function Dashboard() {
   const [tab, setTab] = useState(0);
   const [showWelcome, setShowWelcome] = useState(false);
   const [welcomeForm, setWelcomeForm] = useState({ name: "", age: "30" });
-  const fileRef = useRef<HTMLInputElement>(null);
+  const xlsxRef = useRef<HTMLInputElement>(null);
 
-  // Load from localStorage
+  // ── Profile state ──────────────────────────────────────────────────────────
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
+  const [showProfileScreen, setShowProfileScreen] = useState(true);
+  const [profileAction, setProfileAction] = useState<"select" | "create">("select");
+  const [newProfileName, setNewProfileName] = useState("");
+  const [newProfilePin, setNewProfilePin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState("");
+  const [pendingProfile, setPendingProfile] = useState<Profile | null>(null);
+  const storageKeyRef = useRef<string>(STORAGE_KEY);
+
+  // Keep storageKey in sync with active profile
+  useEffect(() => {
+    storageKeyRef.current = activeProfile ? DATA_PREFIX + activeProfile.id : STORAGE_KEY;
+  }, [activeProfile]);
+
+  // Load profiles + session on mount
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as AppData;
-        setData({ ...DEFAULT_DATA, ...parsed, settings: { ...DEFAULT_DATA.settings, ...parsed.settings } });
-      } else {
-        setShowWelcome(true);
+      const rawProfiles = localStorage.getItem(PROFILES_KEY);
+      const loaded: Profile[] = rawProfiles ? JSON.parse(rawProfiles) : [];
+      setProfiles(loaded);
+
+      const sessionId = sessionStorage.getItem("ap-active-profile");
+      if (sessionId && loaded.length > 0) {
+        const found = loaded.find(p => p.id === sessionId);
+        if (found) {
+          setActiveProfile(found);
+          storageKeyRef.current = DATA_PREFIX + found.id;
+          setShowProfileScreen(false);
+          const raw = localStorage.getItem(DATA_PREFIX + found.id);
+          if (raw) {
+            const parsed = JSON.parse(raw) as AppData;
+            setData({ ...DEFAULT_DATA, ...parsed, settings: { ...DEFAULT_DATA.settings, ...parsed.settings } });
+          } else { setShowWelcome(true); }
+          return;
+        }
       }
-    } catch { setShowWelcome(true); }
+
+      if (loaded.length === 0) setProfileAction("create");
+    } catch { /* first visit */ }
   }, []);
 
-  // Save to localStorage
+  // Save to localStorage (profile-aware)
   const save = useCallback((d: AppData) => {
     setData(d);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+    localStorage.setItem(storageKeyRef.current, JSON.stringify(d));
   }, []);
 
   const upd = useCallback(<K extends keyof AppData>(key: K, val: AppData[K]) => {
@@ -289,6 +332,75 @@ export default function Dashboard() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
+  // ── Profile actions ────────────────────────────────────────────────────────
+
+  async function createProfile() {
+    if (!newProfileName.trim()) return;
+    if (newProfilePin.length !== 4) { setPinError("PIN must be 4 digits"); return; }
+    if (newProfilePin !== confirmPin) { setPinError("PINs don't match"); return; }
+    const hash = await sha256(newProfilePin);
+    const profile: Profile = {
+      id: uid(), name: newProfileName.trim(), pinHash: hash,
+      color: PROFILE_COLORS[profiles.length % PROFILE_COLORS.length],
+      createdAt: new Date().toISOString(),
+    };
+    const updated = [...profiles, profile];
+    setProfiles(updated);
+    localStorage.setItem(PROFILES_KEY, JSON.stringify(updated));
+    activateProfile(profile);
+  }
+
+  function activateProfile(profile: Profile) {
+    setActiveProfile(profile);
+    storageKeyRef.current = DATA_PREFIX + profile.id;
+    sessionStorage.setItem("ap-active-profile", profile.id);
+    const raw = localStorage.getItem(DATA_PREFIX + profile.id);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as AppData;
+        setData({ ...DEFAULT_DATA, ...parsed, settings: { ...DEFAULT_DATA.settings, ...parsed.settings } });
+        setShowProfileScreen(false);
+      } catch { setData(DEFAULT_DATA); setShowWelcome(true); setShowProfileScreen(false); }
+    } else { setData(DEFAULT_DATA); setShowWelcome(true); setShowProfileScreen(false); }
+  }
+
+  async function verifyPin() {
+    if (!pendingProfile) return;
+    const hash = await sha256(pinInput);
+    if (hash === pendingProfile.pinHash) {
+      setPinError(""); setPinInput("");
+      activateProfile(pendingProfile);
+    } else {
+      setPinError("Incorrect PIN. Please try again.");
+      setPinInput("");
+    }
+  }
+
+  function enterAsGuest() {
+    storageKeyRef.current = STORAGE_KEY;
+    sessionStorage.removeItem("ap-active-profile");
+    setActiveProfile(null);
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as AppData;
+        setData({ ...DEFAULT_DATA, ...parsed, settings: { ...DEFAULT_DATA.settings, ...parsed.settings } });
+        setShowProfileScreen(false);
+      } catch { setData(DEFAULT_DATA); setShowWelcome(true); setShowProfileScreen(false); }
+    } else { setData(DEFAULT_DATA); setShowWelcome(true); setShowProfileScreen(false); }
+  }
+
+  function signOut() {
+    sessionStorage.removeItem("ap-active-profile");
+    setActiveProfile(null);
+    setData(DEFAULT_DATA);
+    setPendingProfile(null);
+    setPinInput(""); setPinError("");
+    setNewProfileName(""); setNewProfilePin(""); setConfirmPin("");
+    setProfileAction(profiles.length > 0 ? "select" : "create");
+    setShowProfileScreen(true);
+  }
+
   // Welcome submit
   function submitWelcome() {
     if (!welcomeForm.name.trim()) return;
@@ -297,27 +409,555 @@ export default function Dashboard() {
     setShowWelcome(false);
   }
 
-  // Export JSON
-  function exportJSON() {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href = url;
-    a.download = `cc-finance-backup-${new Date().toISOString().slice(0,10)}.json`;
-    a.click(); URL.revokeObjectURL(url);
+  // ── Excel Export (Professional Styled + Dropdown Validation) ──────────────
+
+  async function exportExcel(templateOnly: boolean) {
+    // ExcelJS — handles colours, merged cells AND real data-validation dropdowns natively
+    const EXM = await import("exceljs" as any) as any;
+    const EX  = EXM.default ?? EXM;
+    const wb  = new EX.Workbook();
+    wb.creator  = "CC Associates";
+    wb.created  = new Date();
+
+    // ── Shared colour palette (ARGB: Alpha + RGB) ────────────────────────────
+    const PH = "FF534AB7"; // Purple header
+    const GH = "FFB8973A"; // Gold accent
+    const NV = "FF1A1630"; // Dark navy (cover)
+    const LP = "FFEDE9FF"; // Light purple alt row
+    const WH = "FFFFFFFF"; // White
+    const DK = "FF1E1B4B"; // Dark text
+    const MT = "FF7A7AAA"; // Muted text
+    const EG = "FFF9FAFB"; // Example row bg
+    const EGT= "FF9CA3AF"; // Example row text
+
+    const sf  = (argb: string) => ({ type: "pattern" as const, pattern: "solid" as const, fgColor: { argb } });
+    const fnt = (argb: string, sz = 11, bold = false, italic = false) =>
+      ({ name: "Calibri", size: sz, bold, italic, color: { argb } });
+    const aln = (h: "left"|"center"|"right", v: "top"|"middle"|"bottom" = "middle", wrap = false) =>
+      ({ horizontal: h, vertical: v, wrapText: wrap });
+
+    // Apply style to a single ExcelJS cell
+    const stc = (cell: any, fillA: string, fontA: string, h: "left"|"center"|"right",
+                 bold = false, sz = 11, italic = false, numFmt?: string) => {
+      cell.fill      = sf(fillA);
+      cell.font      = fnt(fontA, sz, bold, italic);
+      cell.alignment = aln(h);
+      if (numFmt) cell.numFmt = numFmt;
+    };
+
+    // Style every cell in a row
+    const str = (ws: any, rowNum: number, ncols: number,
+                 fillA: string, fontA: string, h: "left"|"center"|"right",
+                 bold = false, sz = 11, amtCols: number[] = []) => {
+      const row = ws.getRow(rowNum);
+      for (let c = 1; c <= ncols; c++) {
+        const cell = row.getCell(c);
+        stc(cell, fillA, fontA, amtCols.includes(c) ? "right" : h, bold, sz);
+        if (amtCols.includes(c)) cell.numFmt = "#,##0.00";
+      }
+    };
+
+    // Add a real dropdown validation to a range
+    const dv = (ws: any, range: string, options: string[]) => {
+      ws.dataValidations.add(range, {
+        type: "list",
+        allowBlank: true,
+        formulae: [`"${options.join(",")}"`],
+        showDropDown: false,
+        showErrorMessage: true,
+        errorStyle: "error",
+        error: "Please choose from the dropdown list",
+        errorTitle: "Invalid Entry",
+      });
+    };
+
+    const today    = new Date().toISOString().slice(0, 10);
+    const s        = templateOnly ? DEFAULT_DATA.settings : data.settings;
+    const budgets  = s.monthlyBudgets || {};
+    const income   = templateOnly ? [] : data.income;
+    const expenses = templateOnly ? [] : data.expenses;
+    const invests  = templateOnly ? [] : data.investments;
+    const loans    = templateOnly ? [] : data.loans;
+    const goals    = templateOnly ? [] : data.goals;
+    const AMT      = "#,##0.00";
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 1 — Instructions Cover
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const ws = wb.addWorksheet("Instructions");
+      ws.columns = [{ width: 5 }, { width: 58 }, { width: 46 }, { width: 10 }];
+
+      const addRow = (vals: any[], fillA: string, fontA: string,
+                      h: "left"|"center"|"right", bold = false, sz = 11) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        for (let c = 1; c <= 4; c++) stc(row.getCell(c), fillA, fontA, h, bold, sz);
+        return row;
+      };
+
+      // Title row — merged, tall
+      const r1 = ws.addRow(["PERSONAL FINANCE DASHBOARD"]);
+      r1.height = 40;
+      ws.mergeCells("A1:D1");
+      stc(r1.getCell(1), NV, WH, "center", true, 18);
+
+      // Subtitle
+      const r2 = ws.addRow(["CC Associates  ·  100% Private  ·  No Server Upload"]);
+      r2.height = 22;
+      ws.mergeCells("A2:D2");
+      stc(r2.getCell(1), NV, "FF8B83C8", "center", false, 10);
+
+      ws.addRow([""]);
+
+      const secRows = [
+        ["📋  HOW TO USE THIS FILE"],
+        ["1.", "Fill in each sheet tab with your actual financial data"],
+        ["2.", "Do NOT rename column headers or the sheet names"],
+        ["3.", "Dates must be in YYYY-MM-DD format   e.g.  2025-04-01"],
+        ["4.", "Amounts are in Rupees (₹) — enter numbers only, no commas or ₹ symbol"],
+        ["5.", "Cells with ▾ in the header have a dropdown — click cell then click arrow"],
+        ["6.", "Save the file and click Import in the dashboard to load your data"],
+        [""],
+        ["📁  SHEETS IN THIS FILE"],
+        ["Settings",    "→", "Name, age, bank balance, property value & monthly budgets"],
+        ["Income",      "→", "Income entries with source & tax category dropdowns"],
+        ["Expenses",    "→", "Expenses with category, payment mode & deductibility dropdowns"],
+        ["Investments", "→", "Portfolio with investment type dropdown"],
+        ["Loans_EMI",   "→", "Loan details for EMI and outstanding balance tracking"],
+        ["Goals",       "→", "Financial goals with target amount and deadline"],
+        [""],
+        ["⚠️  NOTES"],
+        ["", "Grey rows in template mode are examples — overwrite with your data"],
+        ["", "Cells with dropdown ▾ show a list — click the cell then click the arrow"],
+        ["", `Generated by: AssociatePiyush.in  ·  ${today}`],
+      ];
+
+      const secHeadRows = new Set([4, 12, 20]); // 1-indexed relative to sheet
+      secRows.forEach((vals, i) => {
+        const rowNum = i + 4; // rows 1-3 already added
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const isHead = secHeadRows.has(rowNum);
+        for (let c = 1; c <= 4; c++)
+          stc(row.getCell(c), isHead ? GH : (rowNum % 2 === 0 ? LP : WH),
+              isHead ? WH : DK, "left", isHead, 10);
+      });
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 2 — Settings
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const ws = wb.addWorksheet("Settings");
+      ws.columns = [{ width: 36 }, { width: 22 }, { width: 40 }];
+      ws.views   = [{ state: "frozen", ySplit: 2 }];
+
+      // Title
+      const tr = ws.addRow(["PERSONAL SETTINGS & MONTHLY BUDGETS"]);
+      tr.height = 32; ws.mergeCells("A1:C1");
+      stc(tr.getCell(1), NV, WH, "center", true, 13);
+
+      // Header
+      const hr = ws.addRow(["Field", "Your Value", "Notes"]);
+      hr.height = 22;
+      [1,2,3].forEach(c => stc(hr.getCell(c), PH, WH, "center", true, 10));
+
+      const dataRows: any[][] = [
+        ["Full Name",          s.name || "",        "Your name"],
+        ["Age",                s.age  || "",        "Current age in years"],
+        ["Bank Balance (₹)",   s.bankBalance || 0,  "Total savings + current account"],
+        ["Property Value (₹)", s.propertyValue || 0,"Market value of owned property"],
+      ];
+      dataRows.forEach((vals, i) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const bg = i % 2 === 0 ? LP : WH;
+        stc(row.getCell(1), bg, DK, "left",  true,  10);
+        stc(row.getCell(2), bg, DK, (i >= 2 ? "right" : "left"), false, 10);
+        if (i >= 2) row.getCell(2).numFmt = AMT;
+        stc(row.getCell(3), WH, MT, "left",  false, 9, true);
+      });
+
+      // Section heading
+      const sg = ws.addRow(["MONTHLY BUDGETS — enter your spending limit per category"]);
+      sg.height = 20; ws.mergeCells(`A${sg.number}:C${sg.number}`);
+      stc(sg.getCell(1), GH, WH, "left", true, 10);
+
+      EXPENSE_CATEGORIES.forEach((cat, i) => {
+        const row = ws.addRow([`Budget — ${cat} (₹)`, budgets[cat] || 0, `Monthly limit for ${cat.toLowerCase()}`]);
+        row.height = 18;
+        const bg = i % 2 === 0 ? LP : WH;
+        stc(row.getCell(1), bg, DK, "left",  true,  10);
+        stc(row.getCell(2), bg, DK, "right", false, 10);
+        row.getCell(2).numFmt = AMT;
+        stc(row.getCell(3), WH, MT, "left",  false, 9, true);
+      });
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 3 — Income
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const NC = 5;
+      const ws = wb.addWorksheet("Income");
+      ws.columns = [{ width: 18 }, { width: 16 }, { width: 16 }, { width: 38 }, { width: 16 }];
+      ws.views   = [{ state: "frozen", ySplit: 2 }];
+      ws.autoFilter = { from: { row: 2, column: 1 }, to: { row: 2, column: NC } };
+
+      // Title
+      const tr = ws.addRow(["INCOME TRACKER"]);
+      tr.height = 32; ws.mergeCells(`A1:E1`);
+      stc(tr.getCell(1), NV, WH, "center", true, 13);
+
+      // Header
+      const hr = ws.addRow(["Date (YYYY-MM-DD)", "Source ▾", "Amount (₹)", "Description", "Tax Category ▾"]);
+      hr.height = 22;
+      [1,2,3,4,5].forEach(c => stc(hr.getCell(c), PH, WH, "center", true, 10));
+
+      const SRCS  = INCOME_SOURCES;
+      const TAXCS = ["Taxable", "Exempt", "Capital Gain"];
+      const samples = templateOnly ? [
+        ["2025-04-01", "Salary",    85000, "April salary",        "Taxable"],
+        ["2025-04-10", "Freelance", 15000, "Project payment",     "Taxable"],
+        ["2025-05-01", "Salary",    85000, "May salary",          "Taxable"],
+        ["2025-05-15", "Rental",    12000, "House rental income", "Taxable"],
+      ] : income.map(e => [e.date, e.source, e.amount, e.description, e.taxCategory]);
+
+      samples.forEach((vals, i) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const bg = templateOnly ? EG : (i % 2 === 0 ? LP : WH);
+        const fg = templateOnly ? EGT : DK;
+        stc(row.getCell(1), bg, fg, "center", false, 10);
+        stc(row.getCell(2), bg, fg, "left",   false, 10);
+        stc(row.getCell(3), bg, fg, "right",  false, 10); row.getCell(3).numFmt = AMT;
+        stc(row.getCell(4), bg, fg, "left",   false, 10);
+        stc(row.getCell(5), bg, fg, "center", false, 10);
+      });
+
+      if (!templateOnly && income.length > 0) {
+        const tot = income.reduce((s, e) => s + e.amount, 0);
+        const row = ws.addRow(["TOTAL", "", tot, "", ""]);
+        row.height = 20;
+        [1,2,4,5].forEach(c => stc(row.getCell(c), GH, WH, "left", true, 10));
+        stc(row.getCell(3), GH, WH, "right", true, 10); row.getCell(3).numFmt = AMT;
+      }
+
+      dv(ws, `B3:B1048576`, SRCS);
+      dv(ws, `E3:E1048576`, TAXCS);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 4 — Expenses
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const NC = 6;
+      const ws = wb.addWorksheet("Expenses");
+      ws.columns = [{ width: 18 }, { width: 18 }, { width: 14 }, { width: 38 }, { width: 16 }, { width: 16 }];
+      ws.views   = [{ state: "frozen", ySplit: 2 }];
+      ws.autoFilter = { from: { row: 2, column: 1 }, to: { row: 2, column: NC } };
+
+      const tr = ws.addRow(["EXPENSE TRACKER"]);
+      tr.height = 32; ws.mergeCells("A1:F1");
+      stc(tr.getCell(1), NV, WH, "center", true, 13);
+
+      const hr = ws.addRow(["Date (YYYY-MM-DD)", "Category ▾", "Amount (₹)", "Description", "Payment Mode ▾", "Tax Deductible ▾"]);
+      hr.height = 22;
+      [1,2,3,4,5,6].forEach(c => stc(hr.getCell(c), PH, WH, "center", true, 10));
+
+      const PMODES = ["UPI", "Cash", "Credit Card", "Debit Card", "Bank Transfer", "Cheque"];
+      const samples = templateOnly ? [
+        ["2025-04-02", "Food & Dining", 4500,  "Grocery shopping",  "UPI",           "No"],
+        ["2025-04-05", "Housing",       15000, "Monthly rent",      "Bank Transfer", "No"],
+        ["2025-04-10", "Transport",     2200,  "Petrol",            "UPI",           "No"],
+        ["2025-04-15", "Healthcare",    800,   "Pharmacy",          "Cash",          "No"],
+        ["2025-04-20", "Entertainment", 1200,  "OTT subscriptions", "Credit Card",   "No"],
+      ] : expenses.map(e => [e.date, e.category, e.amount, e.description, e.paymentMode, e.taxDeductible ? "Yes" : "No"]);
+
+      samples.forEach((vals, i) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const bg = templateOnly ? EG : (i % 2 === 0 ? LP : WH);
+        const fg = templateOnly ? EGT : DK;
+        stc(row.getCell(1), bg, fg, "center", false, 10);
+        stc(row.getCell(2), bg, fg, "left",   false, 10);
+        stc(row.getCell(3), bg, fg, "right",  false, 10); row.getCell(3).numFmt = AMT;
+        stc(row.getCell(4), bg, fg, "left",   false, 10);
+        stc(row.getCell(5), bg, fg, "center", false, 10);
+        stc(row.getCell(6), bg, fg, "center", false, 10);
+      });
+
+      if (!templateOnly && expenses.length > 0) {
+        const tot = expenses.reduce((s, e) => s + e.amount, 0);
+        const row = ws.addRow(["TOTAL", "", tot, "", "", ""]);
+        row.height = 20;
+        [1,2,4,5,6].forEach(c => stc(row.getCell(c), GH, WH, "left", true, 10));
+        stc(row.getCell(3), GH, WH, "right", true, 10); row.getCell(3).numFmt = AMT;
+      }
+
+      dv(ws, "B3:B1048576", EXPENSE_CATEGORIES);
+      dv(ws, "E3:E1048576", PMODES);
+      dv(ws, "F3:F1048576", ["Yes", "No"]);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 5 — Investments
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const NC = 7;
+      const ws = wb.addWorksheet("Investments");
+      ws.columns = [{ width: 16 }, { width: 30 }, { width: 16 }, { width: 18 }, { width: 14 }, { width: 14 }, { width: 20 }];
+      ws.views   = [{ state: "frozen", ySplit: 2 }];
+      ws.autoFilter = { from: { row: 2, column: 1 }, to: { row: 2, column: NC } };
+
+      const tr = ws.addRow(["INVESTMENT PORTFOLIO"]);
+      tr.height = 32; ws.mergeCells("A1:G1");
+      stc(tr.getCell(1), NV, WH, "center", true, 13);
+
+      const hr = ws.addRow(["Type ▾", "Name / Fund Description", "Invested (₹)", "Current Value (₹)", "Start Date", "Maturity Date", "Linked Goal"]);
+      hr.height = 22;
+      [1,2,3,4,5,6,7].forEach(c => stc(hr.getCell(c), PH, WH, "center", true, 10));
+
+      const samples = templateOnly ? [
+        ["Mutual Fund",   "HDFC Top 100 Direct",  50000,  62000,  "2023-06-01", "",           "Retirement"],
+        ["Fixed Deposit", "SBI FD 7.5% p.a.",    100000, 108000, "2024-01-01", "2026-01-01", ""],
+        ["PPF",           "PPF Account",          150000, 168000, "2020-04-01", "2035-04-01", "Retirement"],
+        ["Stocks",        "Infosys, TCS, HDFC",   80000,  96000,  "2022-01-01", "",           ""],
+      ] : invests.map(iv => [iv.type, iv.name, iv.invested, iv.currentValue, iv.date, iv.maturityDate, iv.linkedGoal]);
+
+      samples.forEach((vals, i) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const bg = templateOnly ? EG : (i % 2 === 0 ? LP : WH);
+        const fg = templateOnly ? EGT : DK;
+        stc(row.getCell(1), bg, fg, "left",   false, 10);
+        stc(row.getCell(2), bg, fg, "left",   false, 10);
+        stc(row.getCell(3), bg, fg, "right",  false, 10); row.getCell(3).numFmt = AMT;
+        stc(row.getCell(4), bg, fg, "right",  false, 10); row.getCell(4).numFmt = AMT;
+        stc(row.getCell(5), bg, fg, "center", false, 10);
+        stc(row.getCell(6), bg, fg, "center", false, 10);
+        stc(row.getCell(7), bg, fg, "left",   false, 10);
+      });
+
+      if (!templateOnly && invests.length > 0) {
+        const totI = invests.reduce((s, iv) => s + iv.invested, 0);
+        const totC = invests.reduce((s, iv) => s + iv.currentValue, 0);
+        const row  = ws.addRow(["TOTAL", "", totI, totC, "", "", ""]);
+        row.height = 20;
+        [1,2,5,6,7].forEach(c => stc(row.getCell(c), GH, WH, "left", true, 10));
+        stc(row.getCell(3), GH, WH, "right", true, 10); row.getCell(3).numFmt = AMT;
+        stc(row.getCell(4), GH, WH, "right", true, 10); row.getCell(4).numFmt = AMT;
+      }
+
+      dv(ws, "A3:A1048576", INVESTMENT_TYPES);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 6 — Loans & EMI
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const ws = wb.addWorksheet("Loans_EMI");
+      ws.columns = [{ width: 14 }, { width: 22 }, { width: 16 }, { width: 14 }, { width: 18 }, { width: 14 }, { width: 26 }];
+      ws.views   = [{ state: "frozen", ySplit: 2 }];
+
+      const tr = ws.addRow(["LOANS & EMI TRACKER"]);
+      tr.height = 32; ws.mergeCells("A1:G1");
+      stc(tr.getCell(1), NV, WH, "center", true, 13);
+
+      const hr = ws.addRow(["Type ▾", "Lender / Bank", "Principal (₹)", "Rate (% p.a.)", "Tenure (Months)", "Start Date", "EMI (₹ · 0=auto)"]);
+      hr.height = 22;
+      [1,2,3,4,5,6,7].forEach(c => stc(hr.getCell(c), PH, WH, "center", true, 10));
+
+      const samples = templateOnly ? [
+        ["Home",     "HDFC Bank",  3500000, 8.5, 240, "2022-04-01", 0],
+        ["Car",      "Axis Bank",   600000, 9.5,  60, "2023-09-01", 0],
+        ["Personal", "ICICI Bank",  200000,12.0,  36, "2024-06-01", 0],
+      ] : loans.map(l => [l.type, l.lender, l.principal, l.rate, l.tenure, l.startDate, l.emi]);
+
+      samples.forEach((vals, i) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const bg = templateOnly ? EG : (i % 2 === 0 ? LP : WH);
+        const fg = templateOnly ? EGT : DK;
+        stc(row.getCell(1), bg, fg, "left",   false, 10);
+        stc(row.getCell(2), bg, fg, "left",   false, 10);
+        stc(row.getCell(3), bg, fg, "right",  false, 10); row.getCell(3).numFmt = AMT;
+        stc(row.getCell(4), bg, fg, "right",  false, 10); row.getCell(4).numFmt = "0.00";
+        stc(row.getCell(5), bg, fg, "center", false, 10);
+        stc(row.getCell(6), bg, fg, "center", false, 10);
+        stc(row.getCell(7), bg, fg, "right",  false, 10); row.getCell(7).numFmt = AMT;
+      });
+
+      dv(ws, "A3:A1048576", LOAN_TYPES);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SHEET 7 — Goals
+    // ════════════════════════════════════════════════════════════════════════
+    {
+      const NC = 6;
+      const ws = wb.addWorksheet("Goals");
+      ws.columns = [{ width: 28 }, { width: 18 }, { width: 20 }, { width: 14 }, { width: 18 }, { width: 8 }];
+      ws.views   = [{ state: "frozen", ySplit: 2 }];
+
+      const tr = ws.addRow(["FINANCIAL GOALS"]);
+      tr.height = 32; ws.mergeCells("A1:F1");
+      stc(tr.getCell(1), NV, WH, "center", true, 13);
+
+      const hr = ws.addRow(["Goal Name", "Target Amount (₹)", "Current Savings (₹)", "Target Date", "Monthly SIP (₹)", "Icon"]);
+      hr.height = 22;
+      [1,2,3,4,5,6].forEach(c => stc(hr.getCell(c), PH, WH, "center", true, 10));
+
+      const samples = templateOnly ? [
+        ["Emergency Fund",    300000,  120000, "2025-12-31", 15000, "🆘"],
+        ["Home Down Payment", 1500000, 350000, "2027-06-01", 25000, "🏠"],
+        ["Child Education",   2000000,      0, "2035-04-01",  8000, "🎓"],
+        ["Retirement Corpus", 5000000, 800000, "2045-04-01", 20000, "🏦"],
+      ] : goals.map(g => [g.name, g.target, g.current, g.targetDate, g.monthly, g.icon]);
+
+      samples.forEach((vals, i) => {
+        const row = ws.addRow(vals);
+        row.height = 18;
+        const bg = templateOnly ? EG : (i % 2 === 0 ? LP : WH);
+        const fg = templateOnly ? EGT : DK;
+        stc(row.getCell(1), bg, fg, "left",   false, 10);
+        stc(row.getCell(2), bg, fg, "right",  false, 10); row.getCell(2).numFmt = AMT;
+        stc(row.getCell(3), bg, fg, "right",  false, 10); row.getCell(3).numFmt = AMT;
+        stc(row.getCell(4), bg, fg, "center", false, 10);
+        stc(row.getCell(5), bg, fg, "right",  false, 10); row.getCell(5).numFmt = AMT;
+        stc(row.getCell(6), bg, fg, "center", false, 10);
+      });
+
+      if (!templateOnly && goals.length > 0) {
+        const totT = goals.reduce((s, g) => s + g.target,  0);
+        const totC = goals.reduce((s, g) => s + g.current, 0);
+        const row  = ws.addRow(["TOTAL", totT, totC, "", "", ""]);
+        row.height = 20;
+        [1,4,5,6].forEach(c => stc(row.getCell(c), GH, WH, "left",  true, 10));
+        stc(row.getCell(2), GH, WH, "right", true, 10); row.getCell(2).numFmt = AMT;
+        stc(row.getCell(3), GH, WH, "right", true, 10); row.getCell(3).numFmt = AMT;
+      }
+
+      dv(ws, "F3:F1048576", GOAL_ICONS);
+    }
+
+    // ── Download ─────────────────────────────────────────────────────────────
+    const buf  = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = templateOnly ? "AP-Finance-Template.xlsx" : `AP-Finance-Backup-${today}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
-  // Import JSON
-  function importJSON(e: React.ChangeEvent<HTMLInputElement>) {
+  // ── Excel Import ───────────────────────────────────────────────────────────
+
+  function importExcel(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const parsed = JSON.parse(ev.target?.result as string) as AppData;
-        save({ ...DEFAULT_DATA, ...parsed });
-        alert("Data imported successfully!");
-      } catch { alert("Invalid file. Please use a CC Associates backup JSON."); }
+        const wb = XLSX.read(ev.target?.result as ArrayBuffer, { type: "array" });
+        const newData: AppData = { ...DEFAULT_DATA, netWorthHistory: data.netWorthHistory };
+
+        // Settings
+        const sWs = wb.Sheets["Settings"];
+        if (sWs) {
+          const rows = XLSX.utils.sheet_to_json<any[]>(sWs, { header: 1 }) as any[][];
+          const get = (label: string) => { const r = rows.find(row => String(row[0]).startsWith(label)); return r ? r[1] : undefined; };
+          newData.settings = {
+            name: String(get("Name") ?? ""),
+            age: parseInt(String(get("Age") ?? "30")) || 30,
+            bankBalance: parseFloat(String(get("Bank Balance") ?? "0")) || 0,
+            propertyValue: parseFloat(String(get("Property Value") ?? "0")) || 0,
+            monthlyBudgets: {
+              "Housing": parseFloat(String(get("Budget — Housing") ?? "0")) || 0,
+              "Food & Dining": parseFloat(String(get("Budget — Food") ?? "0")) || 0,
+              "Transport": parseFloat(String(get("Budget — Transport") ?? "0")) || 0,
+              "Utilities": parseFloat(String(get("Budget — Utilities") ?? "0")) || 0,
+              "Healthcare": parseFloat(String(get("Budget — Healthcare") ?? "0")) || 0,
+              "Education": parseFloat(String(get("Budget — Education") ?? "0")) || 0,
+              "Entertainment": parseFloat(String(get("Budget — Entertainment") ?? "0")) || 0,
+              "Clothing": parseFloat(String(get("Budget — Clothing") ?? "0")) || 0,
+              "Insurance": parseFloat(String(get("Budget — Insurance") ?? "0")) || 0,
+              "Tax Payments": parseFloat(String(get("Budget — Tax Payments") ?? "0")) || 0,
+              "Professional Fees": parseFloat(String(get("Budget — Professional Fees") ?? "0")) || 0,
+              "Other": parseFloat(String(get("Budget — Other") ?? "0")) || 0,
+            },
+          };
+        }
+
+        // Income
+        const incWs = wb.Sheets["Income"];
+        if (incWs) {
+          const rows = (XLSX.utils.sheet_to_json<any[]>(incWs, { header: 1 }) as any[][]).slice(1);
+          newData.income = rows.filter(r => r[0] && r[2]).map(r => ({
+            id: uid(), date: String(r[0]), source: String(r[1] || "Other"),
+            amount: parseFloat(String(r[2]).replace(/,/g, "")) || 0,
+            description: String(r[3] || ""), taxCategory: String(r[4] || "Taxable"),
+          }));
+        }
+
+        // Expenses
+        const expWs = wb.Sheets["Expenses"];
+        if (expWs) {
+          const rows = (XLSX.utils.sheet_to_json<any[]>(expWs, { header: 1 }) as any[][]).slice(1);
+          newData.expenses = rows.filter(r => r[0] && r[2]).map(r => ({
+            id: uid(), date: String(r[0]), category: String(r[1] || "Other"),
+            amount: parseFloat(String(r[2]).replace(/,/g, "")) || 0,
+            description: String(r[3] || ""), paymentMode: String(r[4] || "UPI"),
+            taxDeductible: String(r[5]).toLowerCase() === "yes",
+          }));
+        }
+
+        // Investments
+        const invWs = wb.Sheets["Investments"];
+        if (invWs) {
+          const rows = (XLSX.utils.sheet_to_json<any[]>(invWs, { header: 1 }) as any[][]).slice(1);
+          newData.investments = rows.filter(r => r[0] && r[2]).map(r => ({
+            id: uid(), type: String(r[0] || "Other"), name: String(r[1] || ""),
+            invested: parseFloat(String(r[2]).replace(/,/g, "")) || 0,
+            currentValue: parseFloat(String(r[3]).replace(/,/g, "")) || 0,
+            date: String(r[4] || ""), maturityDate: String(r[5] || ""), linkedGoal: String(r[6] || ""),
+          }));
+        }
+
+        // Loans
+        const loanWs = wb.Sheets["Loans_EMI"];
+        if (loanWs) {
+          const rows = (XLSX.utils.sheet_to_json<any[]>(loanWs, { header: 1 }) as any[][]).slice(1);
+          newData.loans = rows.filter(r => r[0] && r[2]).map(r => ({
+            id: uid(), type: String(r[0] || "Personal"), lender: String(r[1] || ""),
+            principal: parseFloat(String(r[2]).replace(/,/g, "")) || 0,
+            rate: parseFloat(String(r[3])) || 0,
+            tenure: parseInt(String(r[4])) || 12,
+            startDate: String(r[5] || todayISO()),
+            emi: parseFloat(String(r[6]).replace(/,/g, "")) || 0,
+          }));
+        }
+
+        // Goals
+        const goalWs = wb.Sheets["Goals"];
+        if (goalWs) {
+          const rows = (XLSX.utils.sheet_to_json<any[]>(goalWs, { header: 1 }) as any[][]).slice(1);
+          newData.goals = rows.filter(r => r[0] && r[1]).map(r => ({
+            id: uid(), name: String(r[0]),
+            target: parseFloat(String(r[1]).replace(/,/g, "")) || 0,
+            current: parseFloat(String(r[2]).replace(/,/g, "")) || 0,
+            targetDate: String(r[3] || ""),
+            monthly: parseFloat(String(r[4]).replace(/,/g, "")) || 0,
+            icon: String(r[5] || "🏦"),
+          }));
+        }
+
+        save(newData);
+        alert("✅ Data imported successfully! Dashboard updated.");
+      } catch (err) { alert("❌ Could not read file. Please use an CC Associates Excel template."); }
     };
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
     e.target.value = "";
   }
 
@@ -377,15 +1017,125 @@ export default function Dashboard() {
 
   return (
     <div className="pt-16 bg-[#0F0D1E] min-h-screen">
+
+      {/* ── Profile Screen ──────────────────────────────────────────────────── */}
+      {showProfileScreen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A0818] p-4">
+          <div className="w-full max-w-md">
+            {/* Logo */}
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 rounded-2xl bg-purple-600 flex items-center justify-center mx-auto mb-3">
+                <PiggyBank size={28} className="text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-white">Finance Dashboard</h1>
+              <p className="text-purple-400 text-sm mt-1">CC Associates · 100% Private · Browser Only</p>
+            </div>
+
+            {/* PIN entry overlay */}
+            {pendingProfile && (
+              <div className="bg-[#1A1630] border border-purple-800/60 rounded-2xl p-6">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg"
+                    style={{ background: pendingProfile.color }}>
+                    {pendingProfile.name[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <div className="text-white font-semibold">{pendingProfile.name}</div>
+                    <div className="text-purple-400 text-xs">Enter your 4-digit PIN</div>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <input type="password" maxLength={4} placeholder="••••" value={pinInput}
+                    onChange={e => { setPinInput(e.target.value.replace(/\D/g, "")); setPinError(""); }}
+                    onKeyDown={e => e.key === "Enter" && verifyPin()}
+                    className="w-full bg-[#0F0D1E] border border-purple-800/60 rounded-xl px-4 py-3 text-white text-center text-2xl tracking-[0.5em] focus:outline-none focus:border-purple-500 placeholder:text-purple-800" />
+                  {pinError && <div className="text-red-400 text-xs mt-2 text-center">{pinError}</div>}
+                </div>
+                <div className="flex gap-2">
+                  <Btn variant="ghost" className="flex-1 justify-center" onClick={() => { setPendingProfile(null); setPinInput(""); setPinError(""); }}>Back</Btn>
+                  <Btn variant="primary" className="flex-1 justify-center" onClick={verifyPin}>Unlock <ArrowRight size={14} /></Btn>
+                </div>
+              </div>
+            )}
+
+            {/* Profile selection */}
+            {!pendingProfile && profileAction === "select" && (
+              <div className="bg-[#1A1630] border border-purple-800/60 rounded-2xl p-6">
+                <h2 className="text-white font-semibold mb-4">Select Profile</h2>
+                <div className="space-y-2 mb-4">
+                  {profiles.map(p => (
+                    <button key={p.id} onClick={() => { setPendingProfile(p); setPinInput(""); setPinError(""); }}
+                      className="w-full flex items-center gap-3 bg-[#0F0D1E] border border-purple-900/40 hover:border-purple-600/60 rounded-xl px-4 py-3 transition-colors group">
+                      <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0"
+                        style={{ background: p.color }}>
+                        {p.name[0].toUpperCase()}
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="text-white font-medium">{p.name}</div>
+                        <div className="text-purple-600 text-xs">Created {new Date(p.createdAt).toLocaleDateString("en-IN")}</div>
+                      </div>
+                      <ArrowRight size={14} className="text-purple-600 group-hover:text-purple-400" />
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Btn variant="ghost" className="flex-1 justify-center" onClick={() => setProfileAction("create")}>
+                    <Plus size={14} /> New Profile
+                  </Btn>
+                  <Btn variant="ghost" className="flex-1 justify-center" onClick={enterAsGuest}>
+                    Continue as Guest
+                  </Btn>
+                </div>
+              </div>
+            )}
+
+            {/* Create profile form */}
+            {!pendingProfile && profileAction === "create" && (
+              <div className="bg-[#1A1630] border border-purple-800/60 rounded-2xl p-6">
+                <h2 className="text-white font-semibold mb-1">Create Profile</h2>
+                <p className="text-purple-400 text-xs mb-5">Your data stays in this browser. PIN is hashed locally.</p>
+                <div className="space-y-4 mb-5">
+                  <Input label="Profile Name" placeholder="e.g. Piyush, Family" value={newProfileName}
+                    onChange={e => setNewProfileName(e.target.value)} />
+                  <Input label="4-Digit PIN" type="password" maxLength={4} placeholder="Enter 4-digit PIN" value={newProfilePin}
+                    onChange={e => { setNewProfilePin(e.target.value.replace(/\D/g, "")); setPinError(""); }} />
+                  <Input label="Confirm PIN" type="password" maxLength={4} placeholder="Re-enter PIN" value={confirmPin}
+                    onChange={e => { setConfirmPin(e.target.value.replace(/\D/g, "")); setPinError(""); }} />
+                  {pinError && <div className="text-red-400 text-xs">{pinError}</div>}
+                </div>
+                <div className="flex items-center gap-2 text-xs text-green-400 bg-green-900/20 border border-green-800/30 rounded-xl p-3 mb-4">
+                  <Shield size={13} /> PIN is hashed with SHA-256 and stored only in your browser.
+                </div>
+                <div className="flex gap-2">
+                  {profiles.length > 0 && (
+                    <Btn variant="ghost" className="flex-1 justify-center" onClick={() => setProfileAction("select")}>Back</Btn>
+                  )}
+                  <Btn variant="ghost" className={profiles.length > 0 ? "flex-1 justify-center" : "flex-1 justify-center"} onClick={enterAsGuest}>Guest Mode</Btn>
+                  <Btn variant="primary" className="flex-1 justify-center" onClick={createProfile}>
+                    Create <ArrowRight size={14} />
+                  </Btn>
+                </div>
+              </div>
+            )}
+
+            <p className="text-center text-purple-700 text-xs mt-4">All financial data is stored locally in your browser. Never uploaded anywhere.</p>
+          </div>
+        </div>
+      )}
+
       {/* Welcome Modal */}
-      {showWelcome && (
+      {!showProfileScreen && showWelcome && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="bg-[#1A1630] border border-purple-800/60 rounded-2xl p-8 max-w-md w-full">
             <div className="w-12 h-12 rounded-2xl bg-purple-600 flex items-center justify-center mb-4">
-              <span className="text-white font-bold text-lg">CC</span>
+              {activeProfile
+                ? <span className="text-white font-bold text-lg">{activeProfile.name[0].toUpperCase()}</span>
+                : <PiggyBank size={22} className="text-white" />}
             </div>
-            <h2 className="text-xl font-bold text-white mb-1">Welcome to Your Finance Dashboard</h2>
-            <p className="text-purple-400 text-sm mb-6">Free, private, no login. All data stays in your browser.</p>
+            <h2 className="text-xl font-bold text-white mb-1">
+              {activeProfile ? `Welcome, ${activeProfile.name}!` : "Welcome to Finance Dashboard"}
+            </h2>
+            <p className="text-purple-400 text-sm mb-6">Let's set up your profile. You can change this later in Settings.</p>
             <div className="space-y-4 mb-6">
               <Input label="Your Name" placeholder="e.g. CC Associates" value={welcomeForm.name}
                 onChange={e => setWelcomeForm(f => ({ ...f, name: e.target.value }))} />
@@ -404,17 +1154,22 @@ export default function Dashboard() {
 
       {/* Header */}
       <div className="bg-[#1A1630] border-b border-purple-900/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
           <div>
             <h1 className="text-white font-bold text-lg">
               {data.settings.name ? `${data.settings.name}'s` : "Personal"} Finance Dashboard
             </h1>
-            <p className="text-purple-400 text-xs">CC Associates · 100% Private · Browser Only</p>
+            <p className="text-purple-400 text-xs">
+              CC Associates · 100% Private · Browser Only
+              {activeProfile && <span className="ml-2 text-purple-500">· Profile: {activeProfile.name}</span>}
+            </p>
           </div>
-          <div className="flex gap-2">
-            <Btn variant="ghost" onClick={exportJSON}><Download size={14} />Export</Btn>
-            <Btn variant="ghost" onClick={() => fileRef.current?.click()}><Upload size={14} />Import</Btn>
-            <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={importJSON} />
+          <div className="flex gap-2 flex-wrap">
+            <Btn variant="ghost" onClick={() => exportExcel(false)} title="Export all data to Excel"><Download size={14} />Export</Btn>
+            <Btn variant="ghost" onClick={() => exportExcel(true)} title="Download blank Excel template"><FileText size={14} />Template</Btn>
+            <Btn variant="ghost" onClick={() => xlsxRef.current?.click()} title="Import data from Excel"><Upload size={14} />Import</Btn>
+            <input ref={xlsxRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={importExcel} />
+            <Btn variant="ghost" onClick={signOut} title="Switch profile"><Users size={14} />Profile</Btn>
             <Btn variant="gold" onClick={() => setTab(4)}>
               <BarChart3 size={14} />Tax Planner
             </Btn>
@@ -463,7 +1218,7 @@ export default function Dashboard() {
         {tab === 6 && <GoalsTab data={data} upd={upd} />}
 
         {/* ── TAB 7: REPORTS ───────────────────────────────────────────────── */}
-        {tab === 7 && <ReportsTab data={data} exportJSON={exportJSON} />}
+        {tab === 7 && <ReportsTab data={data} exportExcel={exportExcel} />}
       </div>
     </div>
   );
@@ -1128,16 +1883,16 @@ function TaxTab({ data, upd, avgIncome }: { data: AppData; upd: <K extends keyof
         </div>
       </DCard>
 
-      {/* CA CTA */}
+      {/* CTA */}
       <div className="bg-[#1A1630] border border-purple-700/40 rounded-2xl p-5 flex items-center justify-between gap-4">
         <div>
           <div className="text-white font-semibold">Need help optimizing your taxes?</div>
-          <div className="text-purple-400 text-sm">Chat with CA Sourabh Chavan for personalized advice.</div>
+          <div className="text-purple-400 text-sm">Chat with CC Associates for personalized tax advice.</div>
         </div>
-        <a href="https://wa.me/918421465966?text=Hello%20CA%20Sourabh%2C%20I%20need%20tax%20advisory%20help."
+        <a href="https://wa.me/918421465966?text=Hello%20Piyush%2C%20I%20need%20tax%20advisory%20help."
           target="_blank" rel="noopener noreferrer"
           className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors">
-          <MessageCircle size={16} />Chat with CA <ArrowRight size={14} />
+          <MessageCircle size={16} />Chat on WhatsApp <ArrowRight size={14} />
         </a>
       </div>
     </div>
@@ -1313,8 +2068,7 @@ function GoalsTab({ data, upd }: { data: AppData; upd: <K extends keyof AppData>
 
 // ── REPORTS ───────────────────────────────────────────────────────────────
 
-function ReportsTab({ data, exportJSON }: { data: AppData; exportJSON: () => void }) {
-  const fileRef = useRef<HTMLInputElement>(null);
+function ReportsTab({ data, exportExcel }: { data: AppData; exportExcel: (templateOnly: boolean) => void | Promise<void> }) {
   const months = Array.from({ length: 12 }, (_, i) => {
     const d = new Date(); d.setMonth(d.getMonth() - 11 + i);
     return d.toISOString().slice(0, 7);
@@ -1346,11 +2100,12 @@ function ReportsTab({ data, exportJSON }: { data: AppData; exportJSON: () => voi
       <DCard>
         <h3 className="text-white font-semibold mb-4">Export & Backup</h3>
         <div className="flex flex-wrap gap-3">
-          <Btn variant="primary" onClick={exportJSON}><Download size={14} />Export Full Backup (JSON)</Btn>
-          <Btn variant="gold" onClick={exportCSV}><Download size={14} />Export Monthly Report (CSV)</Btn>
+          <Btn variant="primary" onClick={() => exportExcel(false)}><Download size={14} />Export Full Backup (Excel)</Btn>
+          <Btn variant="ghost" onClick={() => exportExcel(true)}><FileText size={14} />Download Blank Template</Btn>
+          <Btn variant="gold" onClick={exportCSV}><Download size={14} />Monthly Report (CSV)</Btn>
           <Btn variant="ghost" onClick={() => window.print()}><FileText size={14} />Print Report</Btn>
         </div>
-        <div className="mt-3 text-xs text-purple-500">JSON backup includes all income, expenses, investments, loans, and goals. Use it to restore data later.</div>
+        <div className="mt-3 text-xs text-purple-500">Excel backup includes all income, expenses, investments, loans, and goals across 6 sheets. Use the template to import data from scratch.</div>
       </DCard>
 
       {/* Annual Summary */}
