@@ -1,24 +1,28 @@
 import type { Metadata } from "next";
-import ContactForm from "./ContactForm";
+import ContactSection from "./ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact CC Associates for GST, Income Tax, TDS, Audit, Litigation & Forensic Accounting consultations. Call or WhatsApp: +91 84214 65966 (CC Associates) | +91 84214 65966 (CA Sourabh Chavan). Pune — Pan India.",
+    "Contact CC Associates for GST, Income Tax, TDS, Audit & Litigation consultations. Call or WhatsApp: +91 84214 65966. Email: ccassociates2024@gmail.com. Pune, Maharashtra — Pan India. First consultation free.",
   keywords: [
     "contact CC Associates pune",
-    "CC Associates contact",
     "CA Sourabh Chavan contact",
+    "CC Associates WhatsApp",
     "tax consultation pune",
     "GST consultant contact pune",
+    "audit firm contact pune",
+    "tax advisor phone pune",
   ],
-  alternates: { canonical: "https://cc-associates-website.vercel.app/contact" },
+  alternates: {
+    canonical: "https://cc-associates-website.vercel.app/contact",
+  },
   openGraph: {
-    title: "Contact CC Associates | Tax & Advisory Pune",
+    title: "Contact CC Associates | Tax & Advisory Firm Pune",
     description:
       "WhatsApp or call +91 84214 65966. First consultation free. GST, Income Tax, TDS, Audit & Litigation — Pune & Pan India.",
     url: "https://cc-associates-website.vercel.app/contact",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Contact CC Associates" }],
   },
 };
 
@@ -26,20 +30,24 @@ export default function ContactPage() {
   return (
     <div className="pt-16">
       {/* Hero */}
-      <section className="py-14" style={{ background: "linear-gradient(135deg, #F5F3FF 0%, #EEEDFE 50%, #F5F3FF 100%)" }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <p className="text-purple-600 text-xs font-semibold uppercase tracking-widest mb-2">Get in Touch</p>
-          <h1 className="text-4xl font-semibold tracking-tight text-[#26215C] mb-3">
-            Contact CC Associates
-          </h1>
-          <div className="w-12 h-0.5 bg-gold-500 mb-4" />
-          <p className="text-[#7F77DD] text-base max-w-xl leading-relaxed">
-            Reach out via WhatsApp, call, or email. First consultation is free. We respond within 2 business days.
-          </p>
+      <section className="bg-primary py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <p className="text-gold text-sm font-semibold uppercase tracking-wider mb-3">
+              Get in Touch
+            </p>
+            <h1 className="text-4xl font-bold text-white mb-4">
+              Let&apos;s Resolve Your Tax Matter
+            </h1>
+            <p className="text-blue-200 text-lg leading-relaxed">
+              Reach out via WhatsApp, call, or email. First consultation is free.
+              Response within 2–3 working days.
+            </p>
+          </div>
         </div>
       </section>
 
-      <ContactForm />
+      <ContactSection />
     </div>
   );
 }

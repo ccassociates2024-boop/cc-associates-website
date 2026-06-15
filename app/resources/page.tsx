@@ -83,6 +83,24 @@ const taxUpdates = [
 // ── Articles ─────────────────────────────────────────────────────────────────
 const articles = [
   {
+    slug: "ltcg-flat-sale-section-54",
+    title: "LTCG on Flat Sale & Section 54 Exemption — Complete Guide",
+    category: "Income Tax",
+    readTime: "10 min read",
+    date: "June 7, 2026",
+    excerpt:
+      "Long Term Capital Gain on property sale: 12.5% vs 20% with CII indexation, Section 54 conditions, CGAS deposits, Section 54EC bonds — everything you need before selling your flat.",
+  },
+  {
+    slug: "gst-refund-exporters-lut-igst",
+    title: "GST Refund for Exporters: LUT vs IGST Method",
+    category: "GST",
+    readTime: "12 min read",
+    date: "June 7, 2026",
+    excerpt:
+      "Export under LUT (no IGST) or with IGST payment and claim refund? Complete guide for Indian exporters and SEZ suppliers — ITC refund calculation, Rule 89/96A, and best method comparison.",
+  },
+  {
     slug: "gst-itc-eligibility",
     title: "Complete Guide to GST ITC Eligibility under Section 16",
     category: "GST",

@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   FileText, Calculator, BarChart3, FileSpreadsheet, Clock, RefreshCw,
   TrendingUp, Merge, Minimize2, FileOutput, Database, Table, ArrowRight,
-  Landmark, ScrollText, LayoutDashboard, LayoutGrid,
+  Landmark, ScrollText, LayoutDashboard, LayoutGrid, Home,
 } from "lucide-react";
 
 const tools = [
@@ -38,9 +38,18 @@ const tools = [
   },
   {
     icon: BarChart3,
-    label: "ITR Tax Estimator",
-    desc: "Estimate income tax under Old vs New regime with full slab comparison for FY 2025-26.",
+    label: "Income Tax Estimator",
+    desc: "Estimate income tax under Old vs New regime for FY 2025-26 & FY 2026-27 with full slab comparison.",
     href: "/tools/itr-estimator",
+    badge: "New",
+    badgeColor: "bg-green-100 text-green-800",
+    category: "Income Tax",
+  },
+  {
+    icon: Home,
+    label: "LTCG on Property Calculator",
+    desc: "Calculate Long Term Capital Gain on house / flat / plot sale. CII indexation, Section 54 & 54EC exemption planning.",
+    href: "/tools/ltcg-property",
     badge: "New",
     badgeColor: "bg-green-100 text-green-800",
     category: "Income Tax",
@@ -193,50 +202,50 @@ export default function ToolsGrid() {
       </div>
 
       {/* Count line */}
-      <p className="text-center text-sm mb-8" style={{ color: "var(--ap-text-muted)" }}>
+      <p className="text-sm mb-6" style={{ color: "var(--ap-text-muted)" }}>
         Showing <strong style={{ color: "var(--ap-text)" }}>{visible.length}</strong> tool{visible.length !== 1 ? "s" : ""}
-        {active !== "All" && <span> in <span style={{ color: catColor.text }}>{active}</span></span>}
+        {active !== "All" && <span> · <span style={{ color: "var(--ap-gold)" }}>{active}</span></span>}
       </p>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {visible.map((tool) => {
           const cc = CAT_COLORS[tool.category] ?? catColor;
           return (
             <Link
               key={tool.href}
               href={tool.href}
-              className="bg-white border border-gray-100 rounded-[18px] shadow-[0_2px_12px_rgba(10,22,64,0.06)] hover:shadow-[0_8px_32px_rgba(10,22,64,0.12)] hover:border-[rgba(201,168,76,0.3)] hover:-translate-y-1 transition-all duration-250 p-5 flex flex-col group relative"
-              style={{ background: "var(--ap-surface)", borderColor: "var(--ap-border)" }}
+              className="ap-card p-4 flex flex-col group relative"
             >
               {tool.badge && (
-                <span className={`absolute -top-2 -right-2 text-[10px] font-bold px-2 py-0.5 rounded-full ${tool.badgeColor}`}>
+                <span className="absolute top-3 right-3 text-[9px] font-semibold px-1.5 py-0.5 rounded"
+                      style={{ background: "var(--ap-gold-bg)", color: "var(--ap-gold)" }}>
                   {tool.badge}
                 </span>
               )}
 
               {/* Icon */}
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors duration-200"
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3"
                    style={{ background: cc.bg }}>
-                <tool.icon size={20} style={{ color: cc.text }} />
+                <tool.icon size={17} style={{ color: cc.text }} />
               </div>
 
-              {/* Category pill */}
-              <div className="cat-pill mb-1"
-                   style={{ background: cc.bg, color: cc.text }}>
+              {/* Category */}
+              <div className="text-[9px] font-semibold uppercase tracking-wider mb-1.5"
+                   style={{ color: cc.text }}>
                 {tool.category}
               </div>
 
-              <h3 className="font-semibold text-sm leading-tight mb-2" style={{ color: "var(--ap-text)" }}>
+              <h3 className="font-semibold text-sm leading-snug mb-1.5" style={{ color: "var(--ap-text)" }}>
                 {tool.label}
               </h3>
-              <p className="text-xs leading-relaxed flex-1" style={{ color: "var(--ap-text-muted)" }}>
+              <p className="text-[11px] leading-relaxed flex-1" style={{ color: "var(--ap-text-muted)" }}>
                 {tool.desc}
               </p>
 
-              <div className="mt-3 text-xs font-semibold flex items-center gap-1 transition-all duration-200 group-hover:gap-1.5"
-                   style={{ color: cc.text }}>
-                Open Tool <ArrowRight size={11} />
+              <div className="mt-3 text-xs font-medium flex items-center gap-1 group-hover:gap-1.5 transition-all"
+                   style={{ color: "var(--ap-gold)" }}>
+                Open <ArrowRight size={10} />
               </div>
             </Link>
           );
